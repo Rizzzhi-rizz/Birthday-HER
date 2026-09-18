@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! 🎂✨ | A Surprise For You</title>
+  <meta name="description" content="A cute, interactive pastel scrapbook birthday website created with love.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Great+Vibes&family=Kalam:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Sacramento&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Floating Audio Controls & Sparkles Background Canvas -->
+  <canvas id="sparkles-canvas"></canvas>
+  
+  <div class="audio-control-bar">
+    <button id="music-toggle" class="scrapbook-mini-btn" title="Toggle Soft Music">
+      <span class="music-icon">🎵</span> <span id="music-label">Music: Off</span>
+    </button>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <main id="app-container">
+
+    <!-- STEP 1: THE LOCK SCREEN (LANDING PAGE) -->
+    <section id="step-1" class="step-screen active-step bg-purple-yellow-stripes">
+      <div class="scrapbook-container">
+        
+        <div class="step1-header">
+          <h1 class="unlock-cursive-heading">Unlock for Surprise</h1>
+          <div class="floating-stars-accents">✨ 🌟 ✨</div>
+        </div>
+
+        <div class="step1-grid">
+          
+          <!-- Left: Circular framed photo of couple -->
+          <div class="left-photo-card scrapbook-card tilt-left">
+            <div class="washi-tape tape-top"></div>
+            <div class="circular-photo-frame">
+              <img src="assets/new_her_store.jpg" alt="Us Together" class="couple-circular-img">
+            </div>
+            <div class="heart-sticker">💖</div>
+          </div>
+
+          <!-- Center: Sticker-style cat wearing blue party hat -->
+          <div class="center-cat-card">
+            <div class="cat-sticker-wrapper bounce-gentle">
+              <img src="assets/cat_party.png" alt="Party Cat" class="sticker-img">
+              <div class="sparkle-badge">🎉 PARTY TIME! 🎉</div>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Passcode Keypad -->
+          <div class="right-keypad-card scrapbook-card tilt-right">
+            <div class="washi-tape tape-top-right"></div>
+            <h2 class="keypad-title font-handwritten">Enter Passcode</h2>
+            <div class="passcode-display" id="passcode-display">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            
+            <div class="keypad-grid">
+              <button class="key-btn" data-key="1">1</button>
+              <button class="key-btn" data-key="2">2</button>
+              <button class="key-btn" data-key="3">3</button>
+              <button class="key-btn" data-key="4">4</button>
+              <button class="key-btn" data-key="5">5</button>
+              <button class="key-btn" data-key="6">6</button>
+              <button class="key-btn" data-key="7">7</button>
+              <button class="key-btn" data-key="8">8</button>
+              <button class="key-btn" data-key="9">9</button>
+              <button class="key-btn key-action" id="key-clear">⌫</button>
+              <button class="key-btn" data-key="0">0</button>
+              <button class="key-btn key-action key-heart" id="key-submit">💖</button>
+            </div>
+            <p class="keypad-hint">Hint: Her Special Day (2909) 💕</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEP 2: THE TEASER SCREEN -->
+    <section id="step-2" class="step-screen bg-solid-purple-stars">
+      <div class="stars-bg-overlay"></div>
+      <div class="scrapbook-container center-content">
+        
+        <div class="teaser-card scrapbook-card shadow-lg float-anim">
+          <div class="washi-tape tape-top-center"></div>
+          
+          <div class="cat-badge-wrapper">
+            <div class="cat-drawing-circle">
+              <!-- Minimalist Cat Drawing SVG -->
+              <svg viewBox="0 0 100 100" class="minimal-cat-svg">
+                <circle cx="50" cy="50" r="38" fill="#FFF9E6" stroke="#7C65C1" stroke-width="4"/>
+                <!-- Ears -->
+                <polygon points="25,25 35,5 45,28" fill="#FFF9E6" stroke="#7C65C1" stroke-width="4"/>
+                <polygon points="75,25 65,5 55,28" fill="#FFF9E6" stroke="#7C65C1" stroke-width="4"/>
+                <!-- Eyes -->
+                <ellipse cx="38" cy="45" rx="3.5" ry="5" fill="#4A3E6D"/>
+                <ellipse cx="62" cy="45" rx="3.5" ry="5" fill="#4A3E6D"/>
+                <circle cx="39.5" cy="43.5" r="1.2" fill="#FFFFFF"/>
+                <circle cx="63.5" cy="43.5" r="1.2" fill="#FFFFFF"/>
+                <!-- Cheeks -->
+                <circle cx="32" cy="53" r="5" fill="#FFD1DC" opacity="0.8"/>
+                <circle cx="68" cy="53" r="5" fill="#FFD1DC" opacity="0.8"/>
+                <!-- Nose & Mouth -->
+                <path d="M50 49 L47 52 L53 52 Z" fill="#FF80BF"/>
+                <path d="M47 53 Q50 58 50 55 Q50 58 53 53" fill="none" stroke="#4A3E6D" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Whiskers -->
+                <line x1="18" y1="46" x2="30" y2="48" stroke="#7C65C1" stroke-width="2"/>
+                <line x1="16" y1="53" x2="29" y2="53" stroke="#7C65C1" stroke-width="2"/>
+                <line x1="82" y1="46" x2="70" y2="48" stroke="#7C65C1" stroke-width="2"/>
+                <line x1="84" y1="53" x2="71" y2="53" stroke="#7C65C1" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+
+          <h2 class="teaser-question font-handwritten" id="teaser-text">
+            I have a little surprise for you. Wanna see it?
+          </h2>
+
+          <div class="teaser-buttons-row">
+            <button id="btn-yes" class="scrapbook-btn btn-yes-style">
+              YES! 💕
+            </button>
+            <button id="btn-no" class="scrapbook-btn btn-no-style">
+              NO 😜
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEP 3: THE CELEBRATION SCREEN -->
+    <section id="step-3" class="step-screen bg-purple-yellow-stripes">
+      
+      <!-- Festive Bunting Garland across top -->
+      <div class="bunting-garland">
+        <div class="flag flag-1"></div>
+        <div class="flag flag-2"></div>
+        <div class="flag flag-3"></div>
+        <div class="flag flag-4"></div>
+        <div class="flag flag-5"></div>
+        <div class="flag flag-6"></div>
+        <div class="flag flag-7"></div>
+        <div class="flag flag-8"></div>
+        <div class="flag flag-9"></div>
+      </div>
+
+      <div class="scrapbook-container center-content">
+        
+        <div class="celebration-header">
+          <span class="star-accent">⭐</span>
+          <h1 class="celebration-title font-fredoka">HAPPY BIRTHDAY</h1>
+          <span class="star-accent">✨</span>
+        </div>
+        <p class="celebration-subtitle font-handwritten">To the brightest star in my sky 🌟</p>
+
+        <div class="celebration-main-frame scrapbook-card">
+          <div class="washi-tape tape-top-left"></div>
+          <div class="washi-tape tape-top-right"></div>
+          
+          <img src="assets/new_her_smile.jpg" alt="Birthday Girl" class="celebration-couple-img">
+
+          <!-- Festive Stickers overlay -->
+          <div class="sticker disco-ball-sticker" title="Party Vibes!">🪩</div>
+          <div class="sticker balloons-sticker" title="Balloons!">🎈🎈</div>
+          <div class="sticker party-hat-sticker" title="Party Hat!">🥳</div>
+          <div class="sticker sparkles-sticker">✨💖✨</div>
+        </div>
+
+        <button id="btn-to-step4" class="scrapbook-btn btn-yellow-shine pulse-btn">
+          Make a Wish 🎂 ✨
+        </button>
+
+      </div>
+    </section>
+
+    <!-- STEP 4: MAKE A WISH (INTERACTIVE CAKE) -->
+    <section id="step-4" class="step-screen bg-purple-wavy">
+      
+      <!-- Top & Bottom Yellow Wavy Borders -->
+      <div class="wavy-border top-wave">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M0,0 C150,90 350,-40 500,50 C650,140 900,10 1200,60 L1200,0 L0,0 Z" fill="#FDE68A"></path>
+        </svg>
+      </div>
+      <div class="wavy-border bottom-wave">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M0,60 C300,120 500,10 750,70 C950,120 1100,20 1200,60 L1200,120 L0,120 Z" fill="#FDE68A"></path>
+        </svg>
+      </div>
+
+      <div class="scrapbook-container center-content">
+        
+        <h1 class="wish-title font-cursive" id="wish-instruction">blow and make a wish</h1>
+        <p class="wish-subtitle font-handwritten" id="wish-subtext">Tap the candle or blow into your screen! 🕯️</p>
+
+        <div class="cake-stage-container">
+          
+          <!-- Birthday Cake SVG & Flame -->
+          <div class="cake-wrapper" id="cake-touch-area">
+            
+            <!-- Glowing Candle Flame -->
+            <div class="candle-wrapper" id="candle-wrapper">
+              <div class="candle-stick"></div>
+              <div class="candle-wick"></div>
+              <div class="candle-flame-container" id="candle-flame">
+                <div class="flame-outer"></div>
+                <div class="flame-inner"></div>
+                <div class="flame-glow"></div>
+              </div>
+              <div class="smoke-particles" id="smoke-particles"></div>
+            </div>
+
+            <!-- Vector Cake Structure -->
+            <div class="illustrated-cake">
+              <div class="cake-top-layer">
+                <div class="frosting-drips"></div>
+                <div class="sprinkles">
+                  <span class="sp s1"></span><span class="sp s2"></span><span class="sp s3"></span>
+                  <span class="sp s4"></span><span class="sp s5"></span><span class="sp s6"></span>
+                </div>
+              </div>
+              <div class="cake-middle-layer">
+                <div class="cream-border"></div>
+              </div>
+              <div class="cake-bottom-layer">
+                <div class="decorative-pearls"></div>
+              </div>
+              <div class="cake-stand"></div>
+            </div>
+
+          </div>
+
+          <!-- Cat Sticker with Glasses -->
+          <div class="cat-glasses-sticker-wrapper">
+            <img src="assets/cat_glasses.png" alt="Cat with Glasses" class="cat-glasses-img">
+            <div class="speech-bubble font-handwritten" id="cat-bubble">
+              "Make it a good one! 💭"
+            </div>
+          </div>
+
+        </div>
+
+        <button id="btn-to-step5" class="scrapbook-btn btn-gift-unlock hidden-btn">
+          Select Your Gifts 🎁 ✨
+        </button>
+
+      </div>
+    </section>
+
+    <!-- STEP 5: THE GIFT SELECTION -->
+    <section id="step-5" class="step-screen bg-purple-confetti">
+      <div class="scrapbook-container center-content">
+        
+        <h1 class="gift-selection-title font-fredoka">select any gift</h1>
+        <p class="gift-selection-subtitle font-handwritten">Three special surprises await you... ✨</p>
+
+        <div class="gifts-trio-grid">
+          
+          <!-- Gift Box 1 -->
+          <div class="gift-box-card scrapbook-card bounce-on-hover" id="gift-1-btn" data-gift="1">
+            <div class="gift-box-illustration">
+              <div class="box-lid">
+                <div class="ribbon-bow">
+                  <div class="bow-left"></div>
+                  <div class="bow-right"></div>
+                  <div class="bow-knot"></div>
+                </div>
+                <div class="lid-body"></div>
+              </div>
+              <div class="box-base">
+                <div class="ribbon-vertical"></div>
+              </div>
+            </div>
+            <div class="gift-label font-handwritten">Gift #1 🗓️</div>
+            <div class="gift-sublabel font-handwritten">"It's your dayyy"</div>
+          </div>
+
+          <!-- Gift Box 2 -->
+          <div class="gift-box-card scrapbook-card bounce-on-hover" id="gift-2-btn" data-gift="2">
+            <div class="gift-box-illustration">
+              <div class="box-lid">
+                <div class="ribbon-bow">
+                  <div class="bow-left"></div>
+                  <div class="bow-right"></div>
+                  <div class="bow-knot"></div>
+                </div>
+                <div class="lid-body"></div>
+              </div>
+              <div class="box-base">
+                <div class="ribbon-vertical"></div>
+              </div>
+            </div>
+            <div class="gift-label font-handwritten">Gift #2 ✉️</div>
+            <div class="gift-sublabel font-handwritten">"A Special Letter"</div>
+          </div>
+
+          <!-- Gift Box 3 -->
+          <div class="gift-box-card scrapbook-card bounce-on-hover" id="gift-3-btn" data-gift="3">
+            <div class="gift-box-illustration">
+              <div class="box-lid">
+                <div class="ribbon-bow">
+                  <div class="bow-left"></div>
+                  <div class="bow-right"></div>
+                  <div class="bow-knot"></div>
+                </div>
+                <div class="lid-body"></div>
+              </div>
+              <div class="box-base">
+                <div class="ribbon-vertical"></div>
+              </div>
+            </div>
+            <div class="gift-label font-handwritten">Gift #3 🖼️</div>
+            <div class="gift-sublabel font-handwritten">"Museum of US"</div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEP 6: GIFT REVEAL 1 - CALENDAR -->
+    <section id="step-6-calendar" class="step-screen bg-solid-purple-stars gift-screen">
+      <div class="scrapbook-container">
+        
+        <div class="gift-header-bar">
+          <button class="back-to-gifts-btn scrapbook-mini-btn" data-back="step-5">
+            ← Back to Gifts 🎁
+          </button>
+          <h1 class="gift-title font-cursive">it's your dayyy</h1>
+        </div>
+
+        <div class="calendar-scrapbook-layout">
+          
+          <!-- Center Calendar Card -->
+          <div class="calendar-card scrapbook-card shadow-lg">
+            <div class="washi-tape tape-top-center"></div>
+            
+            <div class="calendar-month-header font-fredoka">
+              <span class="month-name">SEPTEMBER 2026</span>
+              <span class="sparkle-icon">👑</span>
+            </div>
+
+            <div class="calendar-grid">
+              <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div>
+              <div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+              
+              <div class="calendar-day empty"></div><div class="calendar-day empty"></div><div class="calendar-day">1</div>
+              <div class="calendar-day">2</div><div class="calendar-day">3</div><div class="calendar-day">4</div><div class="calendar-day">5</div>
+              <div class="calendar-day">6</div><div class="calendar-day">7</div><div class="calendar-day">8</div><div class="calendar-day">9</div>
+              <div class="calendar-day">10</div><div class="calendar-day">11</div><div class="calendar-day">12</div><div class="calendar-day">13</div>
+              <div class="calendar-day">14</div><div class="calendar-day">15</div><div class="calendar-day">16</div><div class="calendar-day">17</div>
+              <div class="calendar-day">18</div><div class="calendar-day">19</div><div class="calendar-day">20</div><div class="calendar-day">21</div>
+              <div class="calendar-day">22</div><div class="calendar-day">23</div><div class="calendar-day">24</div><div class="calendar-day">25</div>
+              <div class="calendar-day">26</div><div class="calendar-day">27</div><div class="calendar-day">28</div>
+              
+              <!-- HIGHLIGHTED 29TH -->
+              <div class="calendar-day highlight-birthday glow-pulse">
+                <span class="day-num">29</span>
+                <span class="crown-icon">👑</span>
+                <div class="heart-badge font-handwritten">Birthday Girl!</div>
+              </div>
+              
+              <div class="calendar-day">30</div>
+            </div>
+          </div>
+
+          <!-- Scattered Polaroid Photos & Heart Stickers -->
+          <div class="scattered-photos-layer">
+            
+            <div class="polaroid-item polaroid-1 scrapbook-card tilt-left">
+              <div class="washi-tape tape-top"></div>
+              <img src="assets/new_her_smile.jpg" alt="Memory 1">
+              <p class="font-handwritten">The Most Special Day 💕</p>
+            </div>
+
+            <div class="polaroid-item polaroid-2 scrapbook-card tilt-right">
+              <div class="washi-tape tape-top-right"></div>
+              <img src="assets/new_her_night.jpg" alt="Memory 2">
+              <p class="font-handwritten">Celebrating YOU! 🥳</p>
+            </div>
+
+            <div class="polaroid-item polaroid-3 scrapbook-card tilt-left-sm">
+              <div class="washi-tape tape-top-left"></div>
+              <img src="assets/new_her_store.jpg" alt="Memory 3">
+              <p class="font-handwritten">Forever & Always ✨</p>
+            </div>
+
+            <div class="heart-sticker-float hs-1">💖</div>
+            <div class="heart-sticker-float hs-2">💘</div>
+            <div class="heart-sticker-float hs-3">💕</div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEP 6: GIFT REVEAL 2 - THE LETTER -->
+    <section id="step-6-letter" class="step-screen bg-solid-purple-stars gift-screen">
+      <div class="scrapbook-container">
+        
+        <div class="gift-header-bar">
+          <button class="back-to-gifts-btn scrapbook-mini-btn" data-back="step-5">
+            ← Back to Gifts 🎁
+          </button>
+          <h1 class="gift-title font-cursive">A Letter For You</h1>
+        </div>
+
+        <div class="letter-gift-layout">
+          
+          <!-- Interactive Envelope Container -->
+          <div class="envelope-container" id="envelope-wrapper">
+            
+            <!-- Envelope Front & Wax Seal -->
+            <div class="envelope" id="interactive-envelope">
+              <div class="envelope-back"></div>
+              
+              <!-- Letter Paper content that slides out -->
+              <div class="letter-paper" id="letter-paper">
+                <div class="letter-decor top-decor">🌸 ✨ 🌸</div>
+                <h2 class="letter-salutation font-cursive">Happy Birthday majhya mandbadak ❤️🎂</h2>
+                
+                <div class="letter-body font-handwritten">
+                  <p>Kuthun start karu he mala kharach kalat nahiye… karan kahi lokanna words madhe explain karna khup difficult asta. Ani tu tyatlich ek ahes.</p>
+
+                  <p>Saglyat pahila, <strong>thank you.</strong><br>
+                  Thank you tu tya diwashi mala birthday wish kelas. Kadachit tujhyasathi te fakt ek simple birthday wish asel, pan majhyasathi nahi. Tya eka wish mule aplyat conversation suru zali, ani honestly, mala tevha bilkul idea navhta ki hi choti si conversation ek divas majhyasathi evdhi special hoil.</p>
+
+                  <p>Thank you tu majhyashi conversation chalu thevlis.<br>
+                  Thank you tu swatahla majhyashi introduce kelas.<br>
+                  Ani thank you… tu majhya life madhe aalis.</p>
+
+                  <p>Kadhi kadhi vichar karto ki jar tya diwashi tu mala wish kel nasatis tar? Kadhachit aplyala ekmekanchi olakhach zali nasti. Kadhachit tu aaj majhya life madhli itki important person nasatis. Ani mhanunach mala vatata ki kahi kahi choti choti goshti aplya life madhe motha meaning gheun yetat.</p>
+
+                  <p>Tu majhya life madhe exactly kashi aalis he explain karna difficult aahe, pan ek goshta nakki aahe — <strong>tu aalis ani kahi tari change zala.</strong></p>
+
+                  <p>Tujhyashi bolताना mala ek veglach comfort feel hoto. Tujha ek message mood change karu shakto, tujhya sobat keleli ek simple conversation suddha divas better banvu shakte. Kadhikadhi aplyat kahi special moment nasato, fakt normal bolna asta… pan tya normal moments madhye suddha mala khup happiness milta.</p>
+
+                  <p>I don't know when you became so important to me.<br>
+                  Pan ek point nantar mala realize zala ki <strong>tujhyashi bolna hi majhya day chi ek favourite part zali aahe.</strong></p>
+
+                  <p>Tujha nature, tujhya chotya chotya goshti, tujhya bolnyachi way, tu ragarag kartes te, tu hasates te… saglach mala somehow special vatata.</p>
+
+                  <p>Ani ho, tu majhya <strong>mandbadak</strong> ahes mhanun thodi majja-masti tar honarach 😂❤️<br>
+                  Pan jokes apart, tu kharach khup precious ahes.</p>
+
+                  <p>Mala mahit nahi future madhe kay lihila aahe. Apan kuthe asu, kiti close asu, life aplyala kuthlya direction la gheun jail… kahi mahit nahi. Pan aajchya divshi mala fakt evdhach sangaycha aahe ki <strong>I am genuinely grateful that I met you.</strong></p>
+
+                  <p>Tujhya birthday la mi tujhyasathi ekach wish karto —<br>
+                  Tu nehmi happy raha.<br>
+                  Tujhya face varchi smile kadhi kami hou naye.<br>
+                  Tula life madhe je kahi hava aahe te sagla milu de.<br>
+                  Ani difficult days ale tari tyancha samna karaychi strength tula milu de.</p>
+
+                  <p>Karan tu happiness deserve kartes.<br>
+                  <strong>Khup jast.</strong></p>
+
+                  <p>Ani kadachit mi pratyek gosht words madhe sangnar nahi, kadachit kahi feelings mi express suddha karu shaknar nahi… pan just know this:</p>
+
+                  <p><strong>You are more special to me than you probably realize.</strong></p>
+
+                  <p>Tujhyamule majhya life madhe kahi beautiful memories add zalyat, kahi moments special zhale, ani saglyat important — mala ek asa person milala jyachyashi bollyavar man halka hota.</p>
+
+                  <p>Mhanun aaj tujhya birthday la fakt "Happy Birthday" mhannun thambaycha nahiye.</p>
+
+                  <p><strong>Thank you for existing.<br>
+                  Thank you for being you.<br>
+                  And most importantly, thank you for coming into my life. ❤️</strong></p>
+
+                  <p>Aplya story chi starting kadachit ek simple birthday wish ne zali hoti…<br>
+                  pan mala nahi mahit hota ki tya eka <strong>"Happy Birthday"</strong> madhun majhya life madhli ek itki beautiful person mala bhetel.</p>
+
+                  <p>I hope this birthday gives you a thousand reasons to smile.</p>
+
+                  <p>Ani ho…</p>
+
+                  <p><strong>Happy Birthday majhya mandbadak. ❤️🎂</strong><br>
+                  Aajcha divas fakt tuzha aahe, so enjoy every single moment.</p>
+
+                  <p>Ani ek promise —<br>
+                  <strong>tujha birthday mi wish kela mhanun nahi, tar tu majhyasathi special ahes mhanun ha letter lihila aahe.</strong></p>
+
+                  <p>Stay happy.<br>
+                  Stay crazy.<br>
+                  Stay exactly the way you are.</p>
+
+                  <p><strong>Once again, Happy Birthday ❤️<br>
+                  Majhya mandbadak. 🫶🏻</strong></p>
+                </div>
+                
+                <div class="letter-signature font-cursive">With all my heart, always ❤️</div>
+                <div class="letter-decor bottom-decor">💕 ✨ 💕</div>
+              </div>
+
+              <div class="envelope-flap" id="envelope-flap"></div>
+              
+              <!-- Interactive Heart Wax Seal -->
+              <div class="wax-seal-btn" id="wax-seal" title="Tap to Open Envelope">
+                <div class="wax-circle">
+                  <span class="wax-heart">💖</span>
+                  <span class="wax-text">TAP TO OPEN</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Framed Her Photo alongside letter -->
+          <div class="framed-photo-side scrapbook-card tilt-right">
+            <div class="washi-tape tape-top"></div>
+            <div class="framed-photo-inner">
+              <img src="assets/new_her_night.jpg" alt="Her Memory" class="side-couple-img">
+            </div>
+            <p class="font-handwritten caption-sweet">My favorite person in the world 🌸</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEP 6: GIFT REVEAL 3 - MUSEUM OF US -->
+    <section id="step-6-museum" class="step-screen bg-solid-purple-stars gift-screen">
+      <div class="scrapbook-container">
+        
+        <div class="gift-header-bar">
+          <button class="back-to-gifts-btn scrapbook-mini-btn" data-back="step-5">
+            ← Back to Gifts 🎁
+          </button>
+          <h1 class="gift-title font-cursive">museum of US</h1>
+          <button id="btn-shower-hearts" class="scrapbook-mini-btn heart-shower-btn">
+            Shower Hearts 💖
+          </button>
+        </div>
+
+        <p class="museum-subtitle font-handwritten">
+          our little world, framed forever 🫖
+        </p>
+
+        <!-- Museum: Minimal Clean Photo Grid -->
+        <div class="museum-minimal-grid" id="museum-canvas">
+
+          <div class="museum-photo-card tilt-left">
+            <div class="washi-tape tape-top-left"></div>
+            <div class="museum-img-wrapper">
+              <img src="assets/new_couple.jpg" alt="Us Together">
+            </div>
+            <p class="font-handwritten museum-caption">Us 🤍</p>
+          </div>
+
+          <div class="museum-photo-card tilt-right">
+            <div class="washi-tape tape-top-right"></div>
+            <div class="museum-img-wrapper">
+              <img src="assets/photo2.jpg" alt="Memory">
+            </div>
+            <p class="font-handwritten museum-caption">Sweetest Moments ✨</p>
+          </div>
+
+          <div class="museum-photo-card tilt-left-sm">
+            <div class="washi-tape tape-top"></div>
+            <div class="museum-img-wrapper">
+              <img src="assets/photo3.jpg" alt="Together">
+            </div>
+            <p class="font-handwritten museum-caption">Forever & Always 💕</p>
+          </div>
+
+          <div class="museum-photo-card tilt-right">
+            <div class="washi-tape tape-top-right"></div>
+            <div class="museum-img-wrapper">
+              <img src="assets/photo5.jpg" alt="Magic">
+            </div>
+            <p class="font-handwritten museum-caption">Pure Magic 🌟</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- POP-UP MODAL FOR "NO" BUTTON IN STEP 2 -->
+  <div id="no-modal" class="modal-overlay hidden-modal">
+    <div class="modal-content scrapbook-card shadow-lg bounce-in">
+      <div class="modal-header">
+        <h2 class="font-fredoka text-danger">How dare you click NO! 😾</h2>
+      </div>
+      <div class="modal-body">
+        <img src="assets/angry_bear.png" alt="Angry Bear Sticker" class="angry-bear-img stomp-anim">
+        <p class="font-handwritten modal-msg">TRY AGAIN! You MUST click YES! 😤💖</p>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-try-again-btn" class="scrapbook-btn btn-yes-style">
+          Okay, I'll Click YES! 💕
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENLARGED PHOTO MODAL FOR MUSEUM OF US -->
+  <div id="photo-modal" class="modal-overlay hidden-modal">
+    <div class="modal-content polaroid-modal scrapbook-card shadow-lg">
+      <button class="modal-close-btn" id="photo-modal-close">&times;</button>
+      <div class="modal-photo-wrapper">
+        <img id="modal-photo-img" src="" alt="Enlarged Memory">
+      </div>
+      <p id="modal-photo-caption" class="font-handwritten modal-photo-caption"></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
