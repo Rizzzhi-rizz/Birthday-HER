@@ -287,9 +287,11 @@ body {
 
 .step1-grid {
   display: grid;
-  grid-template-columns: 1fr 1.1fr 1.2fr;
-  gap: 24px;
+  grid-template-columns: 1.2fr 1fr 1.1fr;
+  gap: 20px;
   align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
 }
 
 @media (max-width: 900px) {
@@ -303,20 +305,20 @@ body {
 /* Left Photo Card */
 .left-photo-card {
   text-align: center;
-  padding: 18px;
+  padding: 16px;
 }
 
 .circular-photo-frame {
-  width: 220px;
-  height: 220px;
-  border-radius: 18px;
+  width: 280px;
+  height: 340px;
+  border-radius: 22px;
   margin: 0 auto 12px auto;
-  border: 6px solid var(--white);
+  border: 8px solid var(--white);
   outline: 3px solid var(--purple-accent);
   overflow: hidden;
   box-shadow:
-    0 12px 32px rgba(124, 101, 193, 0.25),
-    0 3px 8px rgba(0,0,0,0.1),
+    0 16px 36px rgba(124, 101, 193, 0.28),
+    0 4px 12px rgba(0,0,0,0.1),
     inset 0 1px 3px rgba(255,255,255,0.8);
   transition: transform 0.45s var(--ease-spring), box-shadow 0.45s var(--ease-smooth);
 }
@@ -325,16 +327,17 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   transition: transform 0.5s var(--ease-smooth);
 }
 
 .left-photo-card:hover .circular-photo-frame {
   transform: scale(1.04) rotate(1deg);
-  box-shadow: 0 20px 48px rgba(124, 101, 193, 0.35), 0 6px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 24px 52px rgba(124, 101, 193, 0.38), 0 8px 20px rgba(0,0,0,0.14);
 }
 
 .left-photo-card:hover .couple-circular-img {
-  transform: scale(1.07);
+  transform: scale(1.06);
 }
 
 .heart-sticker {
@@ -370,36 +373,32 @@ body {
   text-align: center;
 }
 
-.sticker-img {
-  max-width: 230px;
+.sticker-img-nobg {
+  max-width: 250px;
   height: auto;
-  border-radius: 24px;
-  border: 4px solid var(--white);
-  background: var(--white);
-  padding: 10px;
-  box-shadow: 0 10px 25px var(--shadow-color);
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.08));
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 12px 20px rgba(124, 101, 193, 0.35));
+  transition: transform 0.35s var(--ease-spring);
 }
 
-.bounce-gentle {
-  animation: bounceGentle 3.2s var(--ease-smooth) infinite;
+.sticker-img-nobg:hover {
+  transform: scale(1.08) rotate(4deg);
 }
 
-@keyframes bounceGentle {
-  0%, 100% { transform: translateY(0) scale(1); }
-  30% { transform: translateY(-14px) scale(1.03); }
-  60% { transform: translateY(-8px) scale(1.01); }
+.toggle-wobble {
+  animation: toggleWobble 3s ease-in-out infinite;
+  transform-origin: bottom center;
 }
 
-.sparkle-badge {
-  background: var(--yellow-accent);
-  color: var(--purple-text);
-  font-family: var(--font-fredoka);
-  font-size: 0.95rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 2px solid var(--white);
+@keyframes toggleWobble {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  25% { transform: rotate(-7deg) translateY(-8px); }
+  50% { transform: rotate(0deg) translateY(0); }
+  75% { transform: rotate(7deg) translateY(-8px); }
+}
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   display: inline-block;
   margin-top: 10px;
@@ -683,7 +682,29 @@ body {
   font-size: clamp(2.8rem, 6vw, 5rem);
   color: var(--purple-deep);
   text-shadow: 3px 3px 0px var(--yellow-accent), 6px 6px 0px var(--white);
-  letter-spacing: 3px;
+  letter-spacing: 2px;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.celebration-title .letter-span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) scale(0.3) rotate(-15deg);
+  will-change: opacity, transform;
+}
+
+#step-3.active-step .celebration-title .letter-span {
+  animation: popLetter 0.55s var(--ease-spring) forwards;
+  animation-delay: var(--delay);
+}
+
+@keyframes popLetter {
+  0% { opacity: 0; transform: translateY(35px) scale(0.3) rotate(-15deg); }
+  70% { opacity: 1; transform: translateY(-8px) scale(1.2) rotate(5deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
 }
 
 .star-accent {
@@ -709,6 +730,7 @@ body {
   margin-bottom: 30px;
   position: relative;
   background: var(--white);
+  overflow: visible;
 }
 
 .celebration-couple-img {
@@ -717,48 +739,71 @@ body {
   display: block;
 }
 
-/* Party Stickers */
-.sticker {
+/* Staggered Transparent Image Stickers */
+.staggered-sticker {
   position: absolute;
-  z-index: 12;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  z-index: 15;
+  opacity: 0;
+  transform: scale(0) rotate(-15deg);
+  filter: drop-shadow(0 10px 22px rgba(124, 101, 193, 0.38));
+  pointer-events: auto;
+  transition: transform 0.35s var(--ease-spring);
+  height: auto;
 }
 
-.disco-ball-sticker {
-  font-size: 3rem;
-  top: -20px;
-  left: -20px;
-  animation: rotateDisco 4s ease-in-out infinite alternate;
+.staggered-sticker:hover {
+  transform: scale(1.15) rotate(5deg) !important;
+  z-index: 25;
 }
 
-@keyframes rotateDisco {
-  0% { transform: rotate(-15deg) scale(1); }
-  100% { transform: rotate(15deg) scale(1.1); }
+#step-3.active-step .staggered-sticker {
+  animation: popStickerIn 0.65s var(--ease-spring) forwards;
+  animation-delay: var(--delay);
 }
 
-.balloons-sticker {
-  font-size: 3rem;
-  top: -25px;
-  right: -25px;
-  animation: floatBalloons 3s ease-in-out infinite alternate;
+@keyframes popStickerIn {
+  0% { opacity: 0; transform: scale(0) rotate(-20deg) translateY(24px); }
+  75% { opacity: 1; transform: scale(1.18) rotate(4deg) translateY(-6px); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg) translateY(0); }
 }
 
-@keyframes floatBalloons {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-12px); }
+/* Individual Sticker Positions & Sizes */
+.st-discoball {
+  width: 100px;
+  top: -45px;
+  left: -40px;
 }
 
-.party-hat-sticker {
-  font-size: 2.8rem;
-  bottom: -15px;
-  left: -15px;
-  transform: rotate(-20deg);
+.st-star {
+  width: 85px;
+  top: -40px;
+  right: -35px;
 }
 
-.sparkles-sticker {
-  font-size: 1.5rem;
-  bottom: -15px;
-  right: 15px;
+.st-balloons {
+  width: 115px;
+  top: 30%;
+  right: -60px;
+}
+
+.st-tulips {
+  width: 110px;
+  bottom: -45px;
+  left: -45px;
+}
+
+.st-catcake {
+  width: 130px;
+  bottom: -50px;
+  right: -50px;
+}
+
+@media (max-width: 600px) {
+  .st-discoball { width: 75px; top: -35px; left: -15px; }
+  .st-star { width: 68px; top: -30px; right: -15px; }
+  .st-balloons { width: 90px; right: -32px; }
+  .st-tulips { width: 80px; bottom: -35px; left: -15px; }
+  .st-catcake { width: 95px; bottom: -40px; right: -20px; }
 }
 
 /* ==========================================================================
@@ -1312,43 +1357,129 @@ body {
 
 .scattered-photos-layer {
   position: relative;
-  min-height: 380px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  padding: 15px 10px;
+  min-height: 440px;
 }
 
 .polaroid-item {
-  position: absolute;
-  width: 170px;
-  padding: 10px 10px 24px 10px;
+  position: relative;
+  width: 100%;
+  padding: 10px 10px 22px 10px;
   background: var(--white);
   text-align: center;
   box-shadow: var(--shadow-lg);
+  border-radius: 6px;
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-smooth);
+}
+
+.polaroid-item:hover {
+  transform: translateY(-8px) scale(1.04) rotate(0deg) !important;
+  z-index: 20;
+  box-shadow: 0 16px 35px rgba(124, 101, 193, 0.28);
 }
 
 .polaroid-item img {
   width: 100%;
-  height: 140px;
+  height: 150px;
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 6px;
 }
 
-.polaroid-1 { top: 10px; left: 20px; }
-.polaroid-2 { top: 160px; right: 20px; }
-.polaroid-3 { top: 200px; left: 60px; }
-
-.heart-sticker-float {
-  position: absolute;
-  font-size: 2.2rem;
-  animation: floatHeart 3s ease-in-out infinite alternate;
+/* Title Pop Animation for "it's your dayyy" */
+.animated-pop-title {
+  font-size: clamp(3rem, 7vw, 5.2rem) !important;
+  color: var(--purple-deep);
+  text-shadow: 3px 3px 0px var(--yellow-accent), 5px 5px 0px var(--white);
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  letter-spacing: 1px;
 }
 
-.hs-1 { top: 0; right: 80px; animation-delay: 0s; }
-.hs-2 { top: 140px; left: 0; animation-delay: 0.5s; }
-.hs-3 { bottom: 20px; right: 100px; animation-delay: 1s; }
+.day-letter-span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) scale(0.3) rotate(-15deg);
+  will-change: opacity, transform;
+}
 
-@keyframes floatHeart {
-  0% { transform: translateY(0) rotate(-5deg); }
-  100% { transform: translateY(-10px) rotate(5deg); }
+#step-6-calendar.active-step .day-letter-span {
+  animation: popDayLetter 0.55s var(--ease-spring) forwards;
+  animation-delay: var(--delay);
+}
+
+@keyframes popDayLetter {
+  0% { opacity: 0; transform: translateY(35px) scale(0.3) rotate(-15deg); }
+  70% { opacity: 1; transform: translateY(-8px) scale(1.25) rotate(5deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+
+/* Custom Transparent Stickers on "It's Your Day" Page */
+.day-sticker {
+  position: absolute;
+  z-index: 22;
+  filter: drop-shadow(0 8px 18px rgba(124, 101, 193, 0.35));
+  transition: transform 0.35s var(--ease-spring);
+  opacity: 0;
+  transform: scale(0) rotate(-15deg);
+  pointer-events: auto;
+  height: auto;
+}
+
+.day-sticker:hover {
+  transform: scale(1.22) rotate(6deg) !important;
+  z-index: 30;
+}
+
+#step-6-calendar.active-step .day-sticker {
+  animation: popDaySticker 0.65s var(--ease-spring) forwards, floatStickerDay 3.5s ease-in-out 0.65s infinite alternate;
+  animation-delay: var(--delay), calc(var(--delay) + 0.65s);
+}
+
+@keyframes popDaySticker {
+  0% { opacity: 0; transform: scale(0) rotate(-20deg) translateY(24px); }
+  75% { opacity: 1; transform: scale(1.2) rotate(4deg) translateY(-6px); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg) translateY(0); }
+}
+
+.ds-heart {
+  width: 70px;
+  top: -20px;
+  right: -15px;
+}
+
+.ds-tulips {
+  width: 85px;
+  bottom: -25px;
+  left: -20px;
+}
+
+.ds-discoball {
+  width: 75px;
+  top: 42%;
+  left: -25px;
+}
+
+.ds-evileye {
+  width: 65px;
+  bottom: -20px;
+  right: -10px;
+}
+
+.ds-pinkbow {
+  width: 75px;
+  top: -22px;
+  left: -15px;
+}
+
+@keyframes floatStickerDay {
+  0% { transform: translateY(0) rotate(-4deg); }
+  100% { transform: translateY(-12px) rotate(4deg); }
 }
 
 /* Gift 2: Envelope & Letter */

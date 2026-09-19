@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- STEP 1: KEYPAD & PASSCODE LOGIC ---
   let passcode = [];
-  const correctPasscodes = ['2909', '29', '2026'];
+  const correctPasscodes = ['2009', '20', '2909', '29', '2026'];
   const dots = document.querySelectorAll('#passcode-display .dot');
 
   function updateDots() {
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function validatePasscode() {
     const entered = passcode.join('');
-    // Auto-accept 2909 or any 4 digit passcode for cute user experience!
+    // Auto-accept 2009 or 2909 or any 4 digit passcode for cute user experience!
     if (correctPasscodes.includes(entered) || passcode.length === 4) {
       audio.playSuccessChime();
       createBurstConfetti();
