@@ -61,39 +61,163 @@ body {
   z-index: 1;
 }
 
-/* Audio Control Bar */
-.audio-control-bar {
+/* ─── Floating Music Player Widget ─── */
+.music-player-widget {
   position: fixed;
   top: 16px;
   right: 16px;
-  z-index: 999;
-}
-
-.scrapbook-mini-btn {
-  background: var(--yellow-cream);
-  border: 2px solid var(--purple-deep);
-  color: var(--purple-text);
-  font-family: var(--font-fredoka);
-  font-size: 0.95rem;
-  padding: 8px 16px;
-  border-radius: 25px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  z-index: 9999;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(18px) saturate(1.8);
+  -webkit-backdrop-filter: blur(18px) saturate(1.8);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50px;
+  padding: 8px 14px 8px 8px;
+  box-shadow:
+    0 8px 30px rgba(124, 101, 193, 0.22),
+    0 2px 8px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
+  cursor: default;
+  user-select: none;
 }
 
-.scrapbook-mini-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  background: var(--white);
-  box-shadow: 0 6px 14px rgba(124, 101, 193, 0.25);
+.music-player-widget:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 14px 40px rgba(124, 101, 193, 0.3),
+    0 4px 12px rgba(0,0,0,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.7);
 }
 
-.scrapbook-mini-btn:active {
-  transform: translateY(1px);
+/* ─── Persistent Faint Watermark Footer ─── */
+.watermark-footer {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--purple-text);
+  opacity: 0.52;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.85);
+  transition: opacity 0.3s ease;
 }
+
+.watermark-footer strong {
+  font-weight: 700;
+  color: var(--purple-deep);
+  letter-spacing: 0.05em;
+}
+
+/* Spinning vinyl disc */
+.vinyl-disc {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #f9a8d4 0%, #c084fc 40%, #1e1b4b 42%, #312e81 55%, #4c1d95 70%, #6d28d9 85%, #a78bfa 100%);
+  box-shadow:
+    0 2px 8px rgba(109, 40, 217, 0.4),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Paused state - no spin */
+.vinyl-disc.paused {
+  animation: none !important;
+}
+
+/* Spinning when playing */
+.vinyl-disc.spinning {
+  animation: vinylSpin 3s linear infinite;
+}
+
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Center label dot on vinyl */
+.vinyl-center-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fde68a 0%, #f472b6 100%);
+  box-shadow: 0 0 4px rgba(244, 114, 182, 0.6);
+  position: absolute;
+  z-index: 1;
+}
+
+/* Song info text */
+.player-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.player-song-title {
+  font-family: var(--font-fredoka);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--purple-deep);
+  white-space: nowrap;
+}
+
+.player-artist {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: rgba(74, 62, 109, 0.7);
+  white-space: nowrap;
+}
+
+/* Play/Pause button */
+.player-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #c084fc 0%, #f472b6 100%);
+  color: #fff;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(192, 132, 252, 0.5);
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.player-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 18px rgba(192, 132, 252, 0.7);
+}
+
+.player-btn:active {
+  transform: scale(0.92);
+}
+
+/* "Loading…" state pill */
+.player-song-title.loading-txt {
+  color: rgba(74, 62, 109, 0.45);
+  font-style: italic;
+}
+
 
 /* Main App Container */
 #app-container {
@@ -340,18 +464,32 @@ body {
   transform: scale(1.06);
 }
 
-.heart-sticker {
-  font-size: 2rem;
+.kiss-heart-wrapper {
   position: absolute;
-  bottom: 35px;
-  right: 15px;
-  animation: pulseHeart 2s infinite;
+  bottom: -15px;
+  right: -10px;
+  z-index: 12;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: pulseHeartSticker 2.4s ease-in-out infinite alternate;
 }
 
-@keyframes pulseHeart {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  40% { transform: scale(1.3) rotate(-8deg); }
-  60% { transform: scale(1.25) rotate(8deg); }
+.kiss-heart-img {
+  width: 95px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 6px 14px rgba(225, 29, 72, 0.45));
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.left-photo-card:hover .kiss-heart-img {
+  transform: scale(1.18) rotate(6deg);
+}
+
+@keyframes pulseHeartSticker {
+  0% { transform: scale(1) rotate(-3deg); }
+  50% { transform: scale(1.08) rotate(4deg); }
+  100% { transform: scale(1) rotate(-3deg); }
 }
 
 .caption-handwritten {
@@ -514,6 +652,51 @@ body {
   font-weight: 600;
 }
 
+/* Step 1 Entrance Animations (Replayed on Keypress) */
+#step-1.active-step .unlock-title-container,
+#step-1.animate-keypress .unlock-title-container {
+  animation: unlockTextIntro 0.55s var(--ease-spring) forwards;
+}
+
+#step-1.active-step .left-photo-card,
+#step-1.animate-keypress .left-photo-card {
+  animation: photoFromDown 0.6s var(--ease-spring) forwards;
+}
+
+#step-1.active-step .center-cat-card,
+#step-1.animate-keypress .center-cat-card {
+  animation: catPopIntro 0.55s var(--ease-spring) forwards;
+}
+
+#step-1.active-step .right-keypad-card,
+#step-1.animate-keypress .right-keypad-card {
+  animation: keypadFromRight 0.6s var(--ease-spring) forwards;
+}
+
+@keyframes unlockTextIntro {
+  0% { opacity: 0; transform: translateY(-40px) scale(0.85); }
+  65% { opacity: 1; transform: translateY(6px) scale(1.04); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes photoFromDown {
+  0% { opacity: 0; transform: translateY(80px) rotate(-8deg) scale(0.88); }
+  65% { opacity: 1; transform: translateY(-8px) rotate(-2deg) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) rotate(-3deg) scale(1); }
+}
+
+@keyframes catPopIntro {
+  0% { opacity: 0; transform: scale(0.3) translateY(30px); }
+  70% { opacity: 1; transform: scale(1.12) translateY(-6px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes keypadFromRight {
+  0% { opacity: 0; transform: translateY(60px) rotate(6deg) scale(0.88); }
+  65% { opacity: 1; transform: translateY(-6px) rotate(2deg) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) rotate(3deg) scale(1); }
+}
+
 /* ==========================================================================
    STEP 2: THE TEASER SCREEN
    ========================================================================== */
@@ -539,20 +722,36 @@ body {
   margin-bottom: 20px;
 }
 
-.cat-drawing-circle {
-  width: 140px;
-  height: 140px;
+/* Halftone cat image in surprise/yes-no card */
+.cat-halftone-wrapper {
   margin: 0 auto;
-  border-radius: 50%;
-  background: var(--yellow-cream);
-  border: 4px dashed var(--purple-deep);
-  padding: 10px;
-  box-shadow: 0 8px 20px var(--shadow-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.minimal-cat-svg {
-  width: 100%;
-  height: 100%;
+.cat-halftone-img {
+  width: 170px;
+  height: auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 10px 22px rgba(124, 101, 193, 0.3));
+  transform-origin: bottom center;
+}
+
+/* Continuous jiggle / wiggle animation */
+.cat-jiggle {
+  animation: catJiggle 0.55s ease-in-out infinite alternate;
+}
+
+@keyframes catJiggle {
+  0%   { transform: rotate(-8deg) translateY(0px) scale(1); }
+  25%  { transform: rotate(0deg)  translateY(-6px) scale(1.04); }
+  50%  { transform: rotate(8deg)  translateY(0px) scale(1); }
+  75%  { transform: rotate(0deg)  translateY(-4px) scale(1.02); }
+  100% { transform: rotate(-8deg) translateY(0px) scale(1); }
 }
 
 .teaser-question {
@@ -827,6 +1026,7 @@ body {
   align-items: flex-end;
   justify-content: center;
   gap: 30px;
+  margin-top: 15px;
   margin-bottom: 30px;
   position: relative;
 }
@@ -1041,31 +1241,39 @@ body {
   text-align: center;
 }
 
-.cat-glasses-img {
-  max-width: 160px;
+/* Real cat with blue hat — transparent, gentle float, clean vertical spacing */
+.cat-real-cake-img {
+  max-width: 230px;
+  width: 100%;
   height: auto;
-  border-radius: 20px;
-  border: 4px solid var(--white);
-  background: var(--white);
-  padding: 8px;
-  box-shadow: 0 8px 20px var(--shadow-color);
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.08));
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 14px 28px rgba(124, 101, 193, 0.35));
+  animation: catCakeFloat 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes catCakeFloat {
+  0%   { transform: translateY(0px) rotate(-2deg); }
+  50%  { transform: translateY(-10px) rotate(1deg); }
+  100% { transform: translateY(-5px) rotate(-1deg); }
 }
 
 .speech-bubble {
   background: var(--white);
   border: 3px solid var(--purple-deep);
-  padding: 10px 18px;
+  padding: 8px 18px;
   border-radius: 20px;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: var(--purple-deep);
   font-weight: 700;
   position: absolute;
-  top: -35px;
+  top: -28px;
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  z-index: 10;
 }
 
 .speech-bubble::after {
@@ -1117,8 +1325,8 @@ body {
 .gifts-trio-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 36px;
-  max-width: 980px;
+  gap: 32px;
+  max-width: 1080px;
   width: 100%;
   position: relative;
   z-index: 2;
@@ -1164,8 +1372,8 @@ body {
 /* wrapper so sparkle ring + image sit together */
 .gift-img-wrap {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 220px;
+  height: 220px;
   margin: 0 auto 18px;
   display: flex;
   align-items: center;
@@ -1174,13 +1382,15 @@ body {
 
 /* The 3D gift image */
 .gift-3d-img {
-  width: 140px;
-  height: 140px;
+  width: 210px;
+  height: 210px;
   object-fit: contain;
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 8px 18px rgba(200,0,0,0.25));
-  border-radius: 10px;
+  filter: drop-shadow(0 14px 28px rgba(225, 29, 72, 0.38));
+  border-radius: 0;
+  background: transparent !important;
+  border: none !important;
 }
 
 /* ---- Continuous shake / wiggle — like something inside is trying to get out ---- */
@@ -1503,13 +1713,25 @@ body {
 .env-step-screen {
   padding: 0 !important;
   background: radial-gradient(circle at 50% 50%, #EDE5FA 0%, #D8CEF6 100%) !important;
-  overflow-y: auto;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
   position: relative;
+  height: auto !important;
+  min-height: 100vh;
+}
+
+#step-6-letter.active-step {
+  display: block !important;
+  height: auto !important;
+  min-height: 100vh;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 .letter-subview {
   width: 100%;
   min-height: 100vh;
+  height: auto !important;
   display: flex;
   flex-direction: column;
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -1602,26 +1824,30 @@ body {
 
 
 
-/* SUB-VIEW 2: OPENED LETTER VIEW (FULL SCREEN LETTER, NO PHOTO SIDE) */
+/* SUB-VIEW 2: OPENED LETTER VIEW (FULL SCREEN LETTER WITH WEBGL GALAXY BACKGROUND) */
 .letter-opened-view {
-  background: radial-gradient(circle at 50% 30%, #EDE6F9 0%, #E3D9F6 100%);
-  padding: 30px 40px;
+  background: radial-gradient(circle at 50% 30%, #170d2b 0%, #0d061a 100%);
+  padding: 30px 40px 60px 40px;
   box-sizing: border-box;
   position: relative;  /* contain the absolute canvas */
+  min-height: 100vh;
+  height: auto !important;
+  overflow-y: visible !important;
 }
 
-/* 3D Ballpit background canvas — fills the entire letter-opened-view */
-.ballpit-bg-canvas {
+/* WebGL Galaxy background canvas — fills the entire letter-opened-view */
+.galaxy-bg-canvas {
   position: absolute;
   inset: 0;
   width: 100% !important;
   height: 100% !important;
   z-index: 0;
   display: block;
-  pointer-events: auto; /* allows cursor tracking */
+  pointer-events: none; /* Allows smooth touch drag scrolling on mobile */
+  touch-action: pan-y;
 }
 
-/* All letter content must sit above the ballpit canvas */
+/* All letter content must sit above the canvas */
 .letter-opened-view .opened-letter-topbar,
 .letter-opened-view .opened-letter-layout {
   position: relative;
@@ -1631,14 +1857,15 @@ body {
 
 @media (max-width: 768px) {
   .letter-opened-view {
-    padding: 20px 16px;
+    padding: 16px 12px 60px 12px;
   }
 }
 
 .opened-letter-topbar {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -2091,27 +2318,44 @@ body {
 }
 
 /* =============================================
-   BIG CURSIVE UNLOCK HEADING - PAGE 1
+   DUAL-FONT "UNLOCK FOR SURPRISE" HEADING - PAGE 1
+   Matching exact design reference image
    ============================================= */
-.unlock-cursive-heading {
-  font-family: 'Sacramento', cursive;
-  font-size: clamp(3.5rem, 8vw, 7rem);
-  color: var(--purple-deep);
-  text-align: center;
-  line-height: 1.15;
-  letter-spacing: 0.02em;
-  text-shadow:
-    0 0 30px rgba(124, 101, 193, 0.35),
-    2px 3px 0 rgba(255, 209, 220, 0.6),
-    -1px -1px 0 rgba(124, 101, 193, 0.15);
-  margin-bottom: 0.2em;
-  filter: drop-shadow(0 4px 12px rgba(124, 101, 193, 0.3));
-  animation: cursivePulse 3s ease-in-out infinite;
+.unlock-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  line-height: 0.82;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  user-select: none;
 }
 
-@keyframes cursivePulse {
-  0%, 100% { transform: scale(1); text-shadow: 0 0 30px rgba(124,101,193,0.35), 2px 3px 0 rgba(255,209,220,0.6); }
-  50% { transform: scale(1.03); text-shadow: 0 0 50px rgba(124,101,193,0.5), 2px 3px 0 rgba(255,209,220,0.8); }
+.unlock-serif-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 800;
+  font-size: clamp(3.8rem, 8.8vw, 6.8rem);
+  color: #8C77ED;
+  text-transform: lowercase;
+  letter-spacing: -0.025em;
+  display: block;
+  transform: translateX(-1.2em);
+  text-shadow: 0 4px 18px rgba(140, 119, 237, 0.28);
+}
+
+.unlock-script-text {
+  font-family: 'Italianno', 'Alex Brush', 'Great Vibes', cursive;
+  font-size: clamp(3.6rem, 8vw, 6rem);
+  color: #FFFFFF;
+  text-transform: lowercase;
+  display: block;
+  margin-top: -0.42em;
+  transform: translateX(1.1em);
+  text-shadow:
+    0 2px 14px rgba(124, 101, 193, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
 }
 
 /* Scrollable long letter body */

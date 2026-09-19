@@ -9,24 +9,42 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Great+Vibes&family=Kalam:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Sacramento&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,400;1,600&family=Alex+Brush&family=Italianno&family=Great+Vibes&family=Kalam:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Sacramento&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
   <!-- GSAP Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <!-- Three.js Library for Ballpit 3D physics component -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- Vanilla JS Ballpit — must come after three.js -->
-  <script src="ballpit.js"></script>
+  <!-- WebGL Galaxy background component from React Bits -->
+  <script src="galaxy.js"></script>
+  <!-- YouTube IFrame Player API for continuous background music -->
+  <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 
-  <!-- Floating Audio Controls & Sparkles Background Canvas -->
+  <!-- Sparkles Background Canvas -->
   <canvas id="sparkles-canvas"></canvas>
-  
-  <div class="audio-control-bar">
-    <button id="music-toggle" class="scrapbook-mini-btn" title="Toggle Soft Music">
-      <span class="music-icon">🎵</span> <span id="music-label">Music: Off</span>
+
+  <!-- ✦ Floating Music Player — Lover by Taylor Swift ✦ -->
+  <div id="music-player-widget" class="music-player-widget" title="Lover — Taylor Swift">
+    <!-- Hidden YouTube iframe (audio only) -->
+    <div id="yt-player-container" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden;">
+      <div id="yt-player"></div>
+    </div>
+
+    <!-- Vinyl disc -->
+    <div class="vinyl-disc" id="vinyl-disc">
+      <div class="vinyl-center-dot"></div>
+    </div>
+
+    <!-- Song info -->
+    <div class="player-info">
+      <span class="player-song-title">Lover</span>
+      <span class="player-artist">Taylor Swift ✦</span>
+    </div>
+
+    <!-- Play / Pause button -->
+    <button class="player-btn" id="music-toggle" aria-label="Play / Pause music">
+      <span id="player-icon">▶</span>
     </button>
   </div>
 
@@ -38,7 +56,10 @@
       <div class="scrapbook-container">
         
         <div class="step1-header">
-          <h1 class="unlock-cursive-heading">Unlock for Surprise</h1>
+          <h1 class="unlock-title-container">
+            <span class="unlock-serif-text">unlock</span>
+            <span class="unlock-script-text">for surprise</span>
+          </h1>
           <div class="floating-stars-accents">✨ 🌟 ✨</div>
         </div>
 
@@ -50,7 +71,9 @@
             <div class="circular-photo-frame">
               <img src="assets/black_outfit_mirror.jpg" alt="Us Together" class="couple-circular-img">
             </div>
-            <div class="heart-sticker">💖</div>
+            <div class="heart-sticker kiss-heart-wrapper">
+              <img src="assets/kiss_heart_sticker.png" alt="Lipstick Kiss Heart" class="kiss-heart-img">
+            </div>
           </div>
 
           <!-- Center: Halftone Party Hat Cat Sticker (No Background) -->
@@ -102,30 +125,8 @@
           <div class="washi-tape tape-top-center"></div>
           
           <div class="cat-badge-wrapper">
-            <div class="cat-drawing-circle">
-              <!-- Minimalist Cat Drawing SVG -->
-              <svg viewBox="0 0 100 100" class="minimal-cat-svg">
-                <circle cx="50" cy="50" r="38" fill="#FFF9E6" stroke="#7C65C1" stroke-width="4"/>
-                <!-- Ears -->
-                <polygon points="25,25 35,5 45,28" fill="#FFF9E6" stroke="#7C65C1" stroke-width="4"/>
-                <polygon points="75,25 65,5 55,28" fill="#FFF9E6" stroke="#7C65C1" stroke-width="4"/>
-                <!-- Eyes -->
-                <ellipse cx="38" cy="45" rx="3.5" ry="5" fill="#4A3E6D"/>
-                <ellipse cx="62" cy="45" rx="3.5" ry="5" fill="#4A3E6D"/>
-                <circle cx="39.5" cy="43.5" r="1.2" fill="#FFFFFF"/>
-                <circle cx="63.5" cy="43.5" r="1.2" fill="#FFFFFF"/>
-                <!-- Cheeks -->
-                <circle cx="32" cy="53" r="5" fill="#FFD1DC" opacity="0.8"/>
-                <circle cx="68" cy="53" r="5" fill="#FFD1DC" opacity="0.8"/>
-                <!-- Nose & Mouth -->
-                <path d="M50 49 L47 52 L53 52 Z" fill="#FF80BF"/>
-                <path d="M47 53 Q50 58 50 55 Q50 58 53 53" fill="none" stroke="#4A3E6D" stroke-width="2.5" stroke-linecap="round"/>
-                <!-- Whiskers -->
-                <line x1="18" y1="46" x2="30" y2="48" stroke="#7C65C1" stroke-width="2"/>
-                <line x1="16" y1="53" x2="29" y2="53" stroke="#7C65C1" stroke-width="2"/>
-                <line x1="82" y1="46" x2="70" y2="48" stroke="#7C65C1" stroke-width="2"/>
-                <line x1="84" y1="53" x2="71" y2="53" stroke="#7C65C1" stroke-width="2"/>
-              </svg>
+            <div class="cat-halftone-wrapper">
+              <img src="assets/cat_halftone_surprise.png" alt="Party Cat" class="cat-halftone-img cat-jiggle">
             </div>
           </div>
 
@@ -264,9 +265,9 @@
 
           </div>
 
-          <!-- Cat Sticker with Glasses -->
+          <!-- Real Cat with Blue Party Hat -->
           <div class="cat-glasses-sticker-wrapper">
-            <img src="assets/cat_glasses.png" alt="Cat with Glasses" class="cat-glasses-img">
+            <img src="assets/cat_real_cake_nobg.png" alt="Birthday Cat" class="cat-glasses-img cat-real-cake-img">
             <div class="speech-bubble font-handwritten" id="cat-bubble">
               "Make it a good one! 💭"
             </div>
@@ -296,7 +297,7 @@
           <!-- Gift Box 1 -->
           <div class="gift-box-card gift-3d-card" id="gift-1-btn" data-gift="1">
             <div class="gift-img-wrap">
-              <img src="assets/gift_box_3d.jpg" alt="Gift Box" class="gift-3d-img gift-shake">
+              <img src="assets/gift_red_gold_nobg.png" alt="Gift Box" class="gift-3d-img gift-shake">
               <div class="gift-sparkle-ring"></div>
             </div>
             <div class="gift-label font-handwritten">Gift #1 🗓️</div>
@@ -306,7 +307,7 @@
           <!-- Gift Box 2 -->
           <div class="gift-box-card gift-3d-card" id="gift-2-btn" data-gift="2">
             <div class="gift-img-wrap">
-              <img src="assets/gift_box_3d.jpg" alt="Gift Box" class="gift-3d-img gift-shake" style="animation-delay: 0.15s;">
+              <img src="assets/gift_red_gold_nobg.png" alt="Gift Box" class="gift-3d-img gift-shake" style="animation-delay: 0.15s;">
               <div class="gift-sparkle-ring"></div>
             </div>
             <div class="gift-label font-handwritten">Gift #2 ✉️</div>
@@ -316,7 +317,7 @@
           <!-- Gift Box 3 -->
           <div class="gift-box-card gift-3d-card" id="gift-3-btn" data-gift="3">
             <div class="gift-img-wrap">
-              <img src="assets/gift_box_3d.jpg" alt="Gift Box" class="gift-3d-img gift-shake" style="animation-delay: 0.30s;">
+              <img src="assets/gift_red_gold_nobg.png" alt="Gift Box" class="gift-3d-img gift-shake" style="animation-delay: 0.30s;">
               <div class="gift-sparkle-ring"></div>
             </div>
             <div class="gift-label font-handwritten">Gift #3 🖼️</div>
@@ -457,13 +458,16 @@
       <!-- SUB-VIEW 2: OPENED LETTER PAGE (FULL SCREEN LETTER WITH 3D BALLPIT BACKGROUND) -->
       <div class="letter-subview letter-opened-view hidden" id="letter-opened-view">
         
-        <!-- Interactive 3D Ballpit Canvas from React Bits -->
-        <canvas id="ballpit-canvas" class="ballpit-bg-canvas"></canvas>
+        <!-- Interactive WebGL Galaxy Canvas from React Bits -->
+        <canvas id="galaxy-canvas" class="galaxy-bg-canvas"></canvas>
 
-        <!-- Header with Back Button at Top Right -->
+        <!-- Header with Back Buttons -->
         <div class="opened-letter-topbar">
+          <button class="back-to-gifts-btn scrapbook-mini-btn" data-back="step-5">
+            ← Back to Gifts 🎁
+          </button>
           <button class="back-to-envelope-pill-btn font-fredoka" id="btn-back-to-envelope">
-            back
+            Envelope ✉️
           </button>
         </div>
 
@@ -556,6 +560,11 @@
       </div>
       <p id="modal-photo-caption" class="font-handwritten modal-photo-caption"></p>
     </div>
+  </div>
+
+  <!-- Persistent Faint Watermark Footer -->
+  <div id="watermark-footer" class="watermark-footer">
+    made with ❤️ by <strong>Rizzhi</strong>
   </div>
 
   <script src="script.js"></script>

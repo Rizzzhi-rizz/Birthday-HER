@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
   class SoundEffects {
     constructor() {
       this.ctx = null;
-      this.isMusicPlaying = false;
-      this.musicInterval = null;
     }
 
     initCtx() {
@@ -100,39 +98,96 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) {}
     }
 
-    toggleSoftMusic(onSuccessState) {
-      this.initCtx();
-      if (this.isMusicPlaying) {
-        this.isMusicPlaying = false;
-        clearInterval(this.musicInterval);
-        if (onSuccessState) onSuccessState(false);
-      } else {
-        this.isMusicPlaying = true;
-        if (onSuccessState) onSuccessState(true);
-        
-        // Soft romantic music box melody
-        const melody = [392, 440, 523.25, 587.33, 659.25, 587.33, 523.25, 440];
-        let step = 0;
-        this.musicInterval = setInterval(() => {
-          if (!this.isMusicPlaying) return;
-          const note = melody[step % melody.length];
-          this.playPop(note * 0.75, 'sine');
-          step++;
-        }, 600);
-      }
-    }
   }
 
   const audio = new SoundEffects();
 
-  // Music toggle button
-  const musicBtn = document.getElementById('music-toggle');
-  const musicLabel = document.getElementById('music-label');
+  // ─── YOUTUBE MUSIC PLAYER: "Lover" by Taylor Swift ───────────────────────
+  // Video ID for "Lover" official audio / lyric video
+  const LOVER_VIDEO_ID = 'Ipb7gGlBcb8';
+
+  let ytPlayer       = null;
+  let ytReady        = false;
+  let ytIsPlaying    = false;
+  let ytStartPending = false; // flag to autoplay on first interaction
+
+  const vinylDisc    = document.getElementById('vinyl-disc');
+  const playerIcon   = document.getElementById('player-icon');
+  const musicBtn     = document.getElementById('music-toggle');
+  const songTitleEl  = document.querySelector('.player-song-title');
+
+  // Called by YouTube API once it's ready
+  window.onYouTubeIframeAPIReady = function () {
+    ytPlayer = new YT.Player('yt-player', {
+      height: '1',
+      width: '1',
+      videoId: LOVER_VIDEO_ID,
+      playerVars: {
+        autoplay: 0,       // we'll start on first click
+        controls: 0,
+        loop: 1,
+        playlist: LOVER_VIDEO_ID, // required for loop to work
+        mute: 0,
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1,
+        fs: 0,
+        iv_load_policy: 3,
+      },
+      events: {
+        onReady(e) {
+          ytReady = true;
+          e.target.setVolume(70);
+          if (songTitleEl) {
+            songTitleEl.classList.remove('loading-txt');
+            songTitleEl.textContent = 'Lover';
+          }
+          // If user clicked play before API was ready, start now
+          if (ytStartPending) {
+            ytStartPending = false;
+            e.target.playVideo();
+          }
+        },
+        onStateChange(e) {
+          if (e.data === YT.PlayerState.PLAYING) {
+            ytIsPlaying = true;
+            if (vinylDisc) { vinylDisc.classList.add('spinning'); vinylDisc.classList.remove('paused'); }
+            if (playerIcon) playerIcon.textContent = '⏸';
+          } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+            ytIsPlaying = false;
+            if (vinylDisc) { vinylDisc.classList.remove('spinning'); vinylDisc.classList.add('paused'); }
+            if (playerIcon) playerIcon.textContent = '▶';
+          }
+        },
+        onError() {
+          // Fallback: try alternate known video ID for Lover lyric video
+          if (ytPlayer) ytPlayer.loadVideoById('pHZl9S0IDMU');
+        }
+      }
+    });
+  };
+
+  // Show "Loading…" until API is ready
+  if (songTitleEl) {
+    songTitleEl.textContent = 'Loading…';
+    songTitleEl.classList.add('loading-txt');
+  }
+
+  // Play / Pause toggle
   if (musicBtn) {
     musicBtn.addEventListener('click', () => {
-      audio.toggleSoftMusic((isPlaying) => {
-        musicLabel.textContent = isPlaying ? 'Music: Playing 💖' : 'Music: Off';
-      });
+      audio.playPop(520, 'sine'); // tiny UI feedback click
+      if (!ytReady || !ytPlayer) {
+        // API not ready yet — mark pending, it will auto-start onReady
+        ytStartPending = true;
+        if (playerIcon) playerIcon.textContent = '⏳';
+        return;
+      }
+      if (ytIsPlaying) {
+        ytPlayer.pauseVideo();
+      } else {
+        ytPlayer.playVideo();
+      }
     });
   }
 
@@ -169,6 +224,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function replayStep1Animations() {
+    const step1 = document.getElementById('step-1');
+    if (!step1) return;
+    step1.classList.remove('animate-keypress');
+    void step1.offsetWidth; // Force browser reflow to reset CSS keyframe animations
+    step1.classList.add('animate-keypress');
+  }
+
   function validatePasscode() {
     const entered = passcode.join('');
     // Auto-accept 2009 or 2909 or any 4 digit passcode for cute user experience!
@@ -185,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dots.forEach(d => d.classList.remove('error'));
         passcode = [];
         updateDots();
+        replayStep1Animations();
       }, 500);
     }
   }
@@ -195,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.playPop(400 + passcode.length * 80);
         passcode.push(btn.getAttribute('data-key'));
         updateDots();
+        replayStep1Animations(); // Replay all intro animations on every number tap!
         if (passcode.length === 4) {
           setTimeout(validatePasscode, 200);
         }
@@ -208,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
       audio.playPop(300);
       passcode.pop();
       updateDots();
+      replayStep1Animations();
     });
   }
 
@@ -220,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Auto default if heart pressed directly!
         passcode = ['2','9','0','9'];
         updateDots();
+        replayStep1Animations();
         setTimeout(validatePasscode, 200);
       }
     });
@@ -234,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
           audio.playPop(400 + passcode.length * 80);
           passcode.push(e.key);
           updateDots();
+          replayStep1Animations(); // Replay intro animations on keypress!
           if (passcode.length === 4) {
             setTimeout(validatePasscode, 200);
           }
@@ -242,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.playPop(300);
         passcode.pop();
         updateDots();
+        replayStep1Animations();
       } else if (e.key === 'Enter') {
         validatePasscode();
       }
@@ -486,6 +555,22 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.back-to-gifts-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       audio.playPop(400);
+
+      // Reset & cleanup letter state if returning from opened letter view
+      if (sentenceRevealTimer) clearTimeout(sentenceRevealTimer);
+      isSentenceRevealActive = false;
+      if (typeof disposeGalaxy === 'function') {
+        disposeGalaxy();
+      }
+      const letterOpened = document.getElementById('letter-opened-view');
+      const envFullscreen = document.getElementById('envelope-fullscreen-view');
+      if (letterOpened && !letterOpened.classList.contains('hidden')) {
+        letterOpened.classList.add('hidden');
+      }
+      if (envFullscreen && envFullscreen.classList.contains('hidden')) {
+        envFullscreen.classList.remove('hidden');
+      }
+
       showStep('step-5');
     });
   });
@@ -531,29 +616,35 @@ document.addEventListener('DOMContentLoaded', () => {
   let sentenceRevealTimer = null;
   let isSentenceRevealActive = false;
 
-  // Ballpit instance (created lazily, disposed on back)
-  let ballpitInstance = null;
+  // Galaxy WebGL instance (created lazily, disposed on back)
+  let galaxyInstance = null;
 
-  function initBallpit() {
-    const canvas = document.getElementById('ballpit-canvas');
-    if (!canvas || !window.createBallpit) return;
-    if (ballpitInstance) return; // already running
-    ballpitInstance = window.createBallpit(canvas, {
-      count: 120,
-      colors: [0xff9de2, 0xc084fc, 0xa78bfa, 0xfbbf24, 0xf472b6, 0x60a5fa, 0x34d399],
-      gravity: 0.55,
-      friction: 0.9975,
-      wallBounce: 0.92,
-      minSize: 0.35,
-      maxSize: 0.85,
-      followCursor: true
+  function initGalaxy() {
+    const canvas = document.getElementById('galaxy-canvas');
+    if (!canvas || !window.createGalaxy) return;
+    if (galaxyInstance) return; // already running
+    galaxyInstance = window.createGalaxy(canvas, {
+      focal: [0.5, 0.5],
+      rotation: [1.0, 0.0],
+      starSpeed: 0.5,
+      density: 1.5,
+      hueShift: 240, // Pastel purple & magenta galaxy tones matching website!
+      speed: 1.0,
+      mouseInteraction: true,
+      glowIntensity: 0.6,
+      saturation: 0.85,
+      mouseRepulsion: true,
+      repulsionStrength: 2.0,
+      twinkleIntensity: 0.5,
+      rotationSpeed: 0.1,
+      transparent: true
     });
   }
 
-  function disposeBallpit() {
-    if (ballpitInstance) {
-      ballpitInstance.dispose();
-      ballpitInstance = null;
+  function disposeGalaxy() {
+    if (galaxyInstance) {
+      galaxyInstance.dispose();
+      galaxyInstance = null;
     }
   }
 
@@ -624,8 +715,8 @@ document.addEventListener('DOMContentLoaded', () => {
           envelopeFullscreenView.classList.add('hidden');
           letterOpenedView.classList.remove('hidden');
           window.scrollTo({ top: 0, behavior: 'smooth' });
-          // Start 3D Ballpit background
-          initBallpit();
+          // Start WebGL Galaxy background
+          initGalaxy();
           startTopToBottomSentenceReveal();
         }
       }, 400);
@@ -641,8 +732,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (letterOpenedView && envelopeFullscreenView) {
         letterOpenedView.classList.add('hidden');
         envelopeFullscreenView.classList.remove('hidden');
-        // Stop & free the Ballpit WebGL context
-        disposeBallpit();
+        // Stop & free the Galaxy WebGL context
+        disposeGalaxy();
       }
     });
   }
