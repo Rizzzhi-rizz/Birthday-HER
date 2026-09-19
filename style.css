@@ -1099,7 +1099,7 @@ body {
 }
 
 /* ==========================================================================
-   STEP 5: THE GIFT SELECTION
+   STEP 5: THE GIFT SELECTION — 3D GIFT CARDS
    ========================================================================== */
 
 .gift-selection-title {
@@ -1117,111 +1117,123 @@ body {
 .gifts-trio-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  max-width: 950px;
+  gap: 36px;
+  max-width: 980px;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 @media (max-width: 800px) {
   .gifts-trio-grid {
     grid-template-columns: 1fr;
-    max-width: 340px;
+    max-width: 280px;
   }
 }
 
+/* ---------- Firework Canvas ---------- */
+.firework-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ---------- 3D Gift Card ---------- */
 .gift-box-card {
-  padding: 30px 20px;
+  padding: 28px 20px 22px;
   text-align: center;
   cursor: pointer;
-  background: var(--white);
-  border: 4px solid var(--purple-accent);
-}
-
-.bounce-on-hover:hover {
-  transform: translateY(-12px) scale(1.05) rotate(2deg);
-  border-color: var(--purple-deep);
-  box-shadow: 0 20px 40px var(--shadow-color);
-}
-
-/* Red Gift Box Vector Graphic */
-.gift-box-illustration {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 20px auto;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #fff 60%, #f3eeff);
+  border: 3px solid var(--purple-accent);
+  box-shadow: 0 8px 28px rgba(124,101,193,0.15), 0 2px 6px rgba(0,0,0,0.06);
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
   position: relative;
+  overflow: visible;
 }
 
-.box-lid {
-  width: 130px;
-  height: 35px;
-  background: #E11D48;
-  border-radius: 8px;
+.gift-3d-card:hover {
+  transform: translateY(-14px) scale(1.06);
+  box-shadow: 0 24px 55px rgba(124,101,193,0.28), 0 4px 12px rgba(0,0,0,0.1);
+  border-color: var(--purple-deep);
+}
+
+/* wrapper so sparkle ring + image sit together */
+.gift-img-wrap {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The 3D gift image */
+.gift-3d-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 8px 18px rgba(200,0,0,0.25));
+  border-radius: 10px;
+}
+
+/* ---- Continuous shake / wiggle — like something inside is trying to get out ---- */
+@keyframes giftWiggle {
+  0%,  100% { transform: rotate(0deg)   translateY(0px);   }
+  10%        { transform: rotate(-4deg)  translateY(-3px);  }
+  20%        { transform: rotate( 4deg)  translateY(-5px);  }
+  30%        { transform: rotate(-3deg)  translateY(-2px);  }
+  40%        { transform: rotate( 3deg)  translateY(-4px);  }
+  50%        { transform: rotate(-2deg)  translateY(-1px);  }
+  60%        { transform: rotate( 2deg)  translateY(-3px);  }
+  70%        { transform: rotate(-4deg)  translateY(-5px);  }
+  80%        { transform: rotate( 3deg)  translateY(-2px);  }
+  90%        { transform: rotate(-1deg)  translateY(-1px);  }
+}
+
+.gift-shake {
+  animation: giftWiggle 1.4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* pause wiggle on hover so user can "aim" their click */
+.gift-3d-card:hover .gift-shake {
+  animation-play-state: paused;
+  transform: scale(1.08) rotate(0deg) translateY(-6px);
+  transition: transform 0.25s var(--ease-spring);
+}
+
+/* ---- Pulsing sparkle glow ring behind the gift ---- */
+.gift-sparkle-ring {
   position: absolute;
-  top: 15px;
-  left: -5px;
-  z-index: 5;
-  border: 3px solid #9F1239;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
-
-.gift-box-card:hover .box-lid {
-  transform: translateY(-8px) rotate(-4deg);
-}
-
-.box-base {
-  width: 120px;
-  height: 80px;
-  background: #F43F5E;
-  border-radius: 0 0 10px 10px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  border: 3px solid #9F1239;
-  overflow: hidden;
-}
-
-.ribbon-vertical {
-  width: 24px;
-  height: 100%;
-  background: #FBBF24;
-  margin: 0 auto;
-  border-left: 2px solid #D97706;
-  border-right: 2px solid #D97706;
-}
-
-.ribbon-bow {
-  position: absolute;
-  top: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 25px;
-}
-
-.bow-left, .bow-right {
-  width: 26px;
-  height: 20px;
-  background: #FBBF24;
-  border-radius: 50% 50% 0 50%;
-  border: 2px solid #D97706;
-  position: absolute;
-}
-
-.bow-left { left: 4px; transform: rotate(-20deg); }
-.bow-right { right: 4px; transform: rotate(20deg) scaleX(-1); }
-
-.bow-knot {
-  width: 14px;
-  height: 14px;
-  background: #F59E0B;
+  inset: 0;
   border-radius: 50%;
-  border: 2px solid #B45309;
-  position: absolute;
-  left: 50%;
-  top: 5px;
-  transform: translateX(-50%);
-  z-index: 6;
+  background: radial-gradient(circle, rgba(255,200,50,0.18) 30%, transparent 70%);
+  animation: sparkleRingPulse 1.8s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes sparkleRingPulse {
+  0%,  100% { opacity: 0.5; transform: scale(0.9); }
+  50%        { opacity: 1;   transform: scale(1.15); }
+}
+
+/* ---- Explode animation when clicked ---- */
+@keyframes giftBlast {
+  0%   { transform: scale(1)   rotate(0deg); opacity: 1; }
+  30%  { transform: scale(1.4) rotate(15deg); opacity: 0.9; }
+  60%  { transform: scale(0.6) rotate(-10deg); opacity: 0.5; }
+  100% { transform: scale(0)   rotate(20deg); opacity: 0; }
+}
+
+.gift-3d-img.exploding {
+  animation: giftBlast 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
 }
 
 .gift-label {
@@ -1235,6 +1247,8 @@ body {
   font-size: 1.2rem;
   color: #7864B8;
 }
+
+
 
 /* ==========================================================================
    STEP 6: GIFT REVEALS
@@ -1482,171 +1496,330 @@ body {
   100% { transform: translateY(-12px) rotate(4deg); }
 }
 
-/* Gift 2: Envelope & Letter */
-.letter-gift-layout {
+/* ==========================================================================
+   STEP 6: GIFT REVEAL 2 - FULLSCREEN ENVELOPE & OPENED LETTER
+   ========================================================================== */
+
+.env-step-screen {
+  padding: 0 !important;
+  background: radial-gradient(circle at 50% 50%, #EDE5FA 0%, #D8CEF6 100%) !important;
+  overflow-y: auto;
+  position: relative;
+}
+
+.letter-subview {
+  width: 100%;
+  min-height: 100vh;
   display: flex;
-  gap: 40px;
+  flex-direction: column;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.letter-subview.hidden {
+  display: none !important;
+}
+
+/* SUB-VIEW 1: FULL-BLEED ENVELOPE IMAGE COVERING ENTIRE SCREEN */
+.envelope-fullscreen-view {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 950px;
-  margin: 0 auto;
 }
 
-@media (max-width: 850px) {
-  .letter-gift-layout {
-    flex-direction: column;
-  }
+.env-floating-header {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 50;
 }
 
-.envelope-container {
-  width: 440px;
-  height: 320px;
-  position: relative;
-  perspective: 1000px;
-}
-
-@media (max-width: 480px) {
-  .envelope-container {
-    width: 320px;
-    height: 280px;
-  }
-}
-
-.envelope {
+.envelope-fullbleed-bg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: #C4B5FD;
-  border-radius: 16px;
-  border: 4px solid var(--purple-deep);
-  position: relative;
-  box-shadow: var(--shadow-lg);
-  overflow: visible;
 }
 
-.envelope-flap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 216px solid transparent;
-  border-right: 216px solid transparent;
-  border-top: 150px solid #A78BFA;
-  transform-origin: top center;
-  transition: transform 0.6s ease-in-out;
-  z-index: 10;
-}
-
-@media (max-width: 480px) {
-  .envelope-flap {
-    border-left-width: 156px;
-    border-right-width: 156px;
-    border-top-width: 120px;
-  }
-}
-
-.envelope.open .envelope-flap {
-  transform: rotateX(180deg);
-  z-index: 1;
-}
-
-/* Interactive Wax Seal */
-.wax-seal-btn {
-  position: absolute;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90px;
-  height: 90px;
-  background: radial-gradient(circle, #E11D48 0%, #9F1239 100%);
-  border-radius: 50%;
-  border: 4px solid #FFF;
-  box-shadow: 0 8px 20px rgba(159, 18, 57, 0.4);
-  cursor: pointer;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease, opacity 0.4s ease;
-}
-
-.wax-seal-btn:hover {
-  transform: translateX(-50%) scale(1.08);
-}
-
-.wax-circle {
-  text-align: center;
-  color: var(--white);
-}
-
-.wax-heart {
-  font-size: 1.8rem;
+.envelope-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
-.wax-text {
-  font-family: var(--font-fredoka);
-  font-size: 0.65rem;
-  letter-spacing: 0.5px;
-}
-
-.envelope.open .wax-seal-btn {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Letter Paper Sliding Out */
-.letter-paper {
+/* CENTER RED HEART WAX STAMP HOTSPOT OVER IMAGE */
+.red-wax-seal-center {
   position: absolute;
-  top: 10px;
-  left: 5%;
-  width: 90%;
-  height: 94%;
-  background: #FAF5FF;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 25;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.red-wax-seal-center:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.red-wax-seal-center:active {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+
+.click-here-badge {
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  background: rgba(185, 28, 28, 0.75);
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  animation: pulseClickBadge 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseClickBadge {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+
+
+/* SUB-VIEW 2: OPENED LETTER VIEW (FULL SCREEN LETTER, NO PHOTO SIDE) */
+.letter-opened-view {
+  background: radial-gradient(circle at 50% 30%, #EDE6F9 0%, #E3D9F6 100%);
+  padding: 30px 40px;
+  box-sizing: border-box;
+  position: relative;  /* contain the absolute canvas */
+}
+
+/* 3D Ballpit background canvas — fills the entire letter-opened-view */
+.ballpit-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0;
+  display: block;
+  pointer-events: auto; /* allows cursor tracking */
+}
+
+/* All letter content must sit above the ballpit canvas */
+.letter-opened-view .opened-letter-topbar,
+.letter-opened-view .opened-letter-layout {
+  position: relative;
+  z-index: 10;
+}
+
+
+@media (max-width: 768px) {
+  .letter-opened-view {
+    padding: 20px 16px;
+  }
+}
+
+.opened-letter-topbar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.back-to-envelope-pill-btn {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #6B46C1;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  padding: 8px 24px;
+  border-radius: 30px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(107, 70, 193, 0.15);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.back-to-envelope-pill-btn:hover {
+  background: #6B46C1;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(107, 70, 193, 0.3);
+}
+
+.fullscreen-letter-layout {
+  width: 100% !important;
+  max-width: 950px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.fullscreen-paper {
+  width: 100% !important;
+  min-height: 80vh !important;
+  padding: 45px 55px !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(14px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.6) !important;
+  border-radius: 24px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 0 20px 50px rgba(107, 70, 193, 0.18) !important;
+}
+
+@media (max-width: 600px) {
+  .fullscreen-paper {
+    padding: 24px 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .letter-polaroid-wrapper {
+    width: 280px;
+  }
+}
+
+.purple-checkered-polaroid {
+  background: #FFFFFF;
   border-radius: 12px;
-  padding: 24px;
-  border: 2px solid var(--purple-accent);
-  box-shadow: inset 0 0 15px rgba(230, 225, 245, 0.5);
-  transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  z-index: 4;
-  overflow-y: auto;
-  text-align: left;
+  padding: 16px 16px 40px 16px;
+  box-shadow: 0 20px 40px rgba(107, 70, 193, 0.2);
+  transform: rotate(-2.5deg);
+  position: relative;
+  transition: transform 0.3s ease;
 }
 
-.envelope.open .letter-paper {
-  transform: translateY(-160px) scale(1.05);
-  height: 440px;
-  z-index: 35;
-  box-shadow: var(--shadow-lg);
+.purple-checkered-polaroid:hover {
+  transform: rotate(0deg) scale(1.02);
 }
 
-.letter-salutation {
-  font-size: 2.2rem;
-  color: var(--purple-deep);
-  margin-bottom: 12px;
+.polaroid-photo-inner {
+  width: 100%;
+  height: 280px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #F3E8FF;
+  background-image: 
+    linear-gradient(to right, rgba(167, 139, 250, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(167, 139, 250, 0.2) 1px, transparent 1px);
+  background-size: 16px 16px;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
-.letter-body {
-  font-size: 1.35rem;
-  line-height: 1.5;
-  color: var(--purple-text);
+.letter-polaroid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Purple Ribbon Bow on Polaroid */
+.purple-ribbon-bow {
+  position: absolute;
+  bottom: 8px;
+  left: -14px;
+  width: 65px;
+  height: 65px;
+  filter: drop-shadow(0 4px 8px rgba(126, 34, 206, 0.4));
+  z-index: 10;
+}
+
+.ribbon-bow-svg {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* RIGHT: WRITTEN LETTER WITH TYPEWRITER ANIMATION */
+.letter-content-wrapper {
+  flex-grow: 1;
+  max-width: 680px;
+  width: 100%;
+}
+
+.letter-paper-opened {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 36px 40px;
+  box-shadow: 0 15px 35px rgba(107, 70, 193, 0.12);
+  color: #372E54;
+  font-size: 1.25rem;
+  line-height: 1.65;
+  position: relative;
+  min-height: 400px;
+}
+
+@media (max-width: 480px) {
+  .letter-paper-opened {
+    padding: 24px 20px;
+    font-size: 1.15rem;
+  }
+}
+
+.letter-main-title {
+  font-family: 'Sacramento', 'Great Vibes', 'Caveat', cursive !important;
+  font-size: clamp(3.2rem, 7.5vw, 5.2rem) !important;
+  color: #5B21B6 !important;
+  text-shadow: 
+    2px 3px 0px rgba(255, 209, 220, 0.9),
+    0 0 30px rgba(124, 101, 193, 0.35) !important;
+  margin-bottom: 24px !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.02em !important;
+  text-align: center !important;
+}
+
+.letter-paper-opened p {
   margin-bottom: 16px;
 }
 
-.letter-body p {
-  margin-bottom: 10px;
+.letter-paper-opened strong {
+  color: #5B21B6;
 }
 
-.letter-signature {
-  font-size: 1.8rem;
-  color: var(--pink-deep);
+.letter-sig {
+  font-size: 2.2rem;
+  font-family: 'Sacramento', 'Great Vibes', cursive !important;
+  color: #BE185D;
   text-align: right;
+  margin-top: 24px;
 }
 
-.letter-decor {
-  text-align: center;
-  font-size: 1.1rem;
-  margin: 6px 0;
+/* Sentence Top-to-Bottom Open Animation */
+.letter-sentence-block {
+  opacity: 0;
+  transform: translateY(-24px);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  margin-bottom: 12px;
+}
+
+.letter-sentence-block.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* Framed Photo Side */
@@ -1962,5 +2135,235 @@ body {
 .letter-body p {
   margin-bottom: 0.9em;
   line-height: 1.7;
+}
+
+/* ==========================================================================
+   DRIFT WALL — MUSEUM OF US (Vanilla JS Port of React Bits DriftWall)
+   ========================================================================== */
+
+.museum-fullscreen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0d0818;
+  padding: 0 !important;
+}
+
+.drift-wall {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  perspective: var(--dw-perspective, 1200px);
+  perspective-origin: 50% 50%;
+  --dw-tile-w: 200px;
+  --dw-tile-h: 140px;
+  --dw-gap: 16px;
+  --dw-radius: 14px;
+  --dw-lift: 80px;
+  --dw-dim: 0.52;
+  --dw-gray: 0;
+  --dw-overlay: #0d0818;
+  --dw-edge: 38%;
+  -webkit-mask-image:
+    radial-gradient(ellipse 82% 85% at 50% 48%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(ellipse 82% 85% at 50% 48%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  mask-composite: intersect;
+}
+
+.drift-wall__plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: row;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.drift-wall__col {
+  position: relative;
+  width: calc(var(--dw-tile-w) + var(--dw-gap));
+  transform-style: preserve-3d;
+}
+
+.drift-wall__track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.drift-wall__tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(var(--dw-tile-h) + var(--dw-gap));
+  flex: 0 0 auto;
+  outline: none;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.drift-wall__inner {
+  position: absolute;
+  inset: calc(var(--dw-gap) / 2);
+  display: block;
+  border-radius: var(--dw-radius);
+  overflow: hidden;
+  background: #1a0f2e;
+  opacity: var(--dw-dim);
+  transform: translateZ(0);
+  pointer-events: none;
+  transition:
+    transform  0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity    0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drift-wall__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(var(--dw-gray)) saturate(0.9);
+  transition: filter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+  pointer-events: none;
+}
+
+.drift-wall__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--dw-overlay);
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drift-wall__tile.is-active .drift-wall__inner {
+  opacity: 1;
+  transform: translateZ(var(--dw-lift));
+  box-shadow: 0 28px 65px -16px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.12);
+}
+.drift-wall__tile.is-active img {
+  filter: grayscale(0) saturate(1.1);
+}
+.drift-wall__tile.is-active .drift-wall__overlay {
+  opacity: 0;
+}
+
+.drift-wall__caption {
+  position: absolute;
+  bottom: calc(var(--dw-gap) / 2 + 6px);
+  left:  calc(var(--dw-gap) / 2 + 8px);
+  right: calc(var(--dw-gap) / 2 + 8px);
+  font-family: var(--font-handwritten);
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+.drift-wall__tile.is-active .drift-wall__caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.museum-overlay-ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.museum-header-bar {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(to bottom, rgba(13,8,24,0.9) 0%, transparent 100%);
+}
+
+.museum-title-block {
+  text-align: center;
+  flex: 1;
+}
+
+.museum-drift-title {
+  font-size: clamp(2.4rem, 5vw, 4rem) !important;
+  color: #fff !important;
+  text-shadow:
+    0 0 40px rgba(189,178,254,0.7),
+    0 2px 0 rgba(0,0,0,0.5) !important;
+  margin-bottom: 4px !important;
+  animation: museumTitleGlow 3s ease-in-out infinite;
+}
+
+@keyframes museumTitleGlow {
+  0%, 100% { text-shadow: 0 0 40px rgba(189,178,254,0.7), 0 2px 0 rgba(0,0,0,0.5); }
+  50%       { text-shadow: 0 0 70px rgba(189,178,254,1),   0 2px 0 rgba(0,0,0,0.5); }
+}
+
+.museum-subtitle {
+  color: rgba(255,255,255,0.72) !important;
+  font-size: 1rem !important;
+  margin: 0 !important;
+}
+
+.museum-header-bar .scrapbook-mini-btn {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.28);
+  color: #fff;
+  backdrop-filter: blur(8px);
+}
+.museum-header-bar .scrapbook-mini-btn:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px) scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift-wall__plane,
+  .drift-wall__track { will-change: auto; }
+}
+
+/* ==========================================================================
+   REACT BITS: TextType COMPONENT STYLES
+   ========================================================================== */
+
+.text-type {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.text-type__content {
+  color: inherit;
+}
+
+.text-type__cursor {
+  margin-left: 0.2rem;
+  display: inline-block;
+  opacity: 1;
+  color: var(--purple-deep, #6B46C1);
+  font-weight: 700;
+  user-select: none;
+}
+
+.text-type__cursor--hidden {
+  display: none !important;
 }
 

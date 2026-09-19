@@ -12,6 +12,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Great+Vibes&family=Kalam:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Sacramento&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
+  <!-- GSAP Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Three.js Library for Ballpit 3D physics component -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Vanilla JS Ballpit — must come after three.js -->
+  <script src="ballpit.js"></script>
 </head>
 <body>
 
@@ -282,60 +288,36 @@
         <h1 class="gift-selection-title font-fredoka">select any gift</h1>
         <p class="gift-selection-subtitle font-handwritten">Three special surprises await you... ✨</p>
 
+        <!-- Firework canvas overlay (full-screen, over everything) -->
+        <canvas id="firework-canvas" class="firework-canvas"></canvas>
+
         <div class="gifts-trio-grid">
           
           <!-- Gift Box 1 -->
-          <div class="gift-box-card scrapbook-card bounce-on-hover" id="gift-1-btn" data-gift="1">
-            <div class="gift-box-illustration">
-              <div class="box-lid">
-                <div class="ribbon-bow">
-                  <div class="bow-left"></div>
-                  <div class="bow-right"></div>
-                  <div class="bow-knot"></div>
-                </div>
-                <div class="lid-body"></div>
-              </div>
-              <div class="box-base">
-                <div class="ribbon-vertical"></div>
-              </div>
+          <div class="gift-box-card gift-3d-card" id="gift-1-btn" data-gift="1">
+            <div class="gift-img-wrap">
+              <img src="assets/gift_box_3d.jpg" alt="Gift Box" class="gift-3d-img gift-shake">
+              <div class="gift-sparkle-ring"></div>
             </div>
             <div class="gift-label font-handwritten">Gift #1 🗓️</div>
             <div class="gift-sublabel font-handwritten">"It's your dayyy"</div>
           </div>
 
           <!-- Gift Box 2 -->
-          <div class="gift-box-card scrapbook-card bounce-on-hover" id="gift-2-btn" data-gift="2">
-            <div class="gift-box-illustration">
-              <div class="box-lid">
-                <div class="ribbon-bow">
-                  <div class="bow-left"></div>
-                  <div class="bow-right"></div>
-                  <div class="bow-knot"></div>
-                </div>
-                <div class="lid-body"></div>
-              </div>
-              <div class="box-base">
-                <div class="ribbon-vertical"></div>
-              </div>
+          <div class="gift-box-card gift-3d-card" id="gift-2-btn" data-gift="2">
+            <div class="gift-img-wrap">
+              <img src="assets/gift_box_3d.jpg" alt="Gift Box" class="gift-3d-img gift-shake" style="animation-delay: 0.15s;">
+              <div class="gift-sparkle-ring"></div>
             </div>
             <div class="gift-label font-handwritten">Gift #2 ✉️</div>
             <div class="gift-sublabel font-handwritten">"A Special Letter"</div>
           </div>
 
           <!-- Gift Box 3 -->
-          <div class="gift-box-card scrapbook-card bounce-on-hover" id="gift-3-btn" data-gift="3">
-            <div class="gift-box-illustration">
-              <div class="box-lid">
-                <div class="ribbon-bow">
-                  <div class="bow-left"></div>
-                  <div class="bow-right"></div>
-                  <div class="bow-knot"></div>
-                </div>
-                <div class="lid-body"></div>
-              </div>
-              <div class="box-base">
-                <div class="ribbon-vertical"></div>
-              </div>
+          <div class="gift-box-card gift-3d-card" id="gift-3-btn" data-gift="3">
+            <div class="gift-img-wrap">
+              <img src="assets/gift_box_3d.jpg" alt="Gift Box" class="gift-3d-img gift-shake" style="animation-delay: 0.30s;">
+              <div class="gift-sparkle-ring"></div>
             </div>
             <div class="gift-label font-handwritten">Gift #3 🖼️</div>
             <div class="gift-sublabel font-handwritten">"Museum of US"</div>
@@ -345,6 +327,7 @@
 
       </div>
     </section>
+
 
     <!-- STEP 6: GIFT REVEAL 1 - CALENDAR -->
     <section id="step-6-calendar" class="step-screen bg-solid-purple-stars gift-screen">
@@ -450,185 +433,98 @@
     </section>
 
     <!-- STEP 6: GIFT REVEAL 2 - THE LETTER -->
-    <section id="step-6-letter" class="step-screen bg-solid-purple-stars gift-screen">
-      <div class="scrapbook-container">
-        
-        <div class="gift-header-bar">
+    <section id="step-6-letter" class="step-screen gift-screen env-step-screen">
+      
+      <!-- SUB-VIEW 1: FULL SCREEN ENVELOPE (IMAGE COVERING ENTIRE SCREEN) -->
+      <div class="letter-subview envelope-fullscreen-view" id="envelope-fullscreen-view">
+        <div class="env-floating-header">
           <button class="back-to-gifts-btn scrapbook-mini-btn" data-back="step-5">
             ← Back to Gifts 🎁
           </button>
-          <h1 class="gift-title font-cursive">A Letter For You</h1>
         </div>
 
-        <div class="letter-gift-layout">
+        <!-- Fullscreen Envelope Image -->
+        <div class="envelope-fullbleed-bg">
+          <img src="assets/envelope_wax_seal_full.jpg" alt="Envelope with Wax Seal" class="envelope-cover-img">
           
-          <!-- Interactive Envelope Container -->
-          <div class="envelope-container" id="envelope-wrapper">
-            
-            <!-- Envelope Front & Wax Seal -->
-            <div class="envelope" id="interactive-envelope">
-              <div class="envelope-back"></div>
-              
-              <!-- Letter Paper content that slides out -->
-              <div class="letter-paper" id="letter-paper">
-                <div class="letter-decor top-decor">🌸 ✨ 🌸</div>
-                <h2 class="letter-salutation font-cursive">Happy Birthday majhya mandbadak ❤️🎂</h2>
-                
-                <div class="letter-body font-handwritten">
-                  <p>Kuthun start karu he mala kharach kalat nahiye… karan kahi lokanna words madhe explain karna khup difficult asta. Ani tu tyatlich ek ahes.</p>
-
-                  <p>Saglyat pahila, <strong>thank you.</strong><br>
-                  Thank you tu tya diwashi mala birthday wish kelas. Kadachit tujhyasathi te fakt ek simple birthday wish asel, pan majhyasathi nahi. Tya eka wish mule aplyat conversation suru zali, ani honestly, mala tevha bilkul idea navhta ki hi choti si conversation ek divas majhyasathi evdhi special hoil.</p>
-
-                  <p>Thank you tu majhyashi conversation chalu thevlis.<br>
-                  Thank you tu swatahla majhyashi introduce kelas.<br>
-                  Ani thank you… tu majhya life madhe aalis.</p>
-
-                  <p>Kadhi kadhi vichar karto ki jar tya diwashi tu mala wish kel nasatis tar? Kadhachit aplyala ekmekanchi olakhach zali nasti. Kadhachit tu aaj majhya life madhli itki important person nasatis. Ani mhanunach mala vatata ki kahi kahi choti choti goshti aplya life madhe motha meaning gheun yetat.</p>
-
-                  <p>Tu majhya life madhe exactly kashi aalis he explain karna difficult aahe, pan ek goshta nakki aahe — <strong>tu aalis ani kahi tari change zala.</strong></p>
-
-                  <p>Tujhyashi bolताना mala ek veglach comfort feel hoto. Tujha ek message mood change karu shakto, tujhya sobat keleli ek simple conversation suddha divas better banvu shakte. Kadhikadhi aplyat kahi special moment nasato, fakt normal bolna asta… pan tya normal moments madhye suddha mala khup happiness milta.</p>
-
-                  <p>I don't know when you became so important to me.<br>
-                  Pan ek point nantar mala realize zala ki <strong>tujhyashi bolna hi majhya day chi ek favourite part zali aahe.</strong></p>
-
-                  <p>Tujha nature, tujhya chotya chotya goshti, tujhya bolnyachi way, tu ragarag kartes te, tu hasates te… saglach mala somehow special vatata.</p>
-
-                  <p>Ani ho, tu majhya <strong>mandbadak</strong> ahes mhanun thodi majja-masti tar honarach 😂❤️<br>
-                  Pan jokes apart, tu kharach khup precious ahes.</p>
-
-                  <p>Mala mahit nahi future madhe kay lihila aahe. Apan kuthe asu, kiti close asu, life aplyala kuthlya direction la gheun jail… kahi mahit nahi. Pan aajchya divshi mala fakt evdhach sangaycha aahe ki <strong>I am genuinely grateful that I met you.</strong></p>
-
-                  <p>Tujhya birthday la mi tujhyasathi ekach wish karto —<br>
-                  Tu nehmi happy raha.<br>
-                  Tujhya face varchi smile kadhi kami hou naye.<br>
-                  Tula life madhe je kahi hava aahe te sagla milu de.<br>
-                  Ani difficult days ale tari tyancha samna karaychi strength tula milu de.</p>
-
-                  <p>Karan tu happiness deserve kartes.<br>
-                  <strong>Khup jast.</strong></p>
-
-                  <p>Ani kadachit mi pratyek gosht words madhe sangnar nahi, kadachit kahi feelings mi express suddha karu shaknar nahi… pan just know this:</p>
-
-                  <p><strong>You are more special to me than you probably realize.</strong></p>
-
-                  <p>Tujhyamule majhya life madhe kahi beautiful memories add zalyat, kahi moments special zhale, ani saglyat important — mala ek asa person milala jyachyashi bollyavar man halka hota.</p>
-
-                  <p>Mhanun aaj tujhya birthday la fakt "Happy Birthday" mhannun thambaycha nahiye.</p>
-
-                  <p><strong>Thank you for existing.<br>
-                  Thank you for being you.<br>
-                  And most importantly, thank you for coming into my life. ❤️</strong></p>
-
-                  <p>Aplya story chi starting kadachit ek simple birthday wish ne zali hoti…<br>
-                  pan mala nahi mahit hota ki tya eka <strong>"Happy Birthday"</strong> madhun majhya life madhli ek itki beautiful person mala bhetel.</p>
-
-                  <p>I hope this birthday gives you a thousand reasons to smile.</p>
-
-                  <p>Ani ho…</p>
-
-                  <p><strong>Happy Birthday majhya mandbadak. ❤️🎂</strong><br>
-                  Aajcha divas fakt tuzha aahe, so enjoy every single moment.</p>
-
-                  <p>Ani ek promise —<br>
-                  <strong>tujha birthday mi wish kela mhanun nahi, tar tu majhyasathi special ahes mhanun ha letter lihila aahe.</strong></p>
-
-                  <p>Stay happy.<br>
-                  Stay crazy.<br>
-                  Stay exactly the way you are.</p>
-
-                  <p><strong>Once again, Happy Birthday ❤️<br>
-                  Majhya mandbadak. 🫶🏻</strong></p>
-                </div>
-                
-                <div class="letter-signature font-cursive">With all my heart, always ❤️</div>
-                <div class="letter-decor bottom-decor">💕 ✨ 💕</div>
-              </div>
-
-              <div class="envelope-flap" id="envelope-flap"></div>
-              
-              <!-- Interactive Heart Wax Seal -->
-              <div class="wax-seal-btn" id="wax-seal" title="Tap to Open Envelope">
-                <div class="wax-circle">
-                  <span class="wax-heart">💖</span>
-                  <span class="wax-text">TAP TO OPEN</span>
-                </div>
-              </div>
-            </div>
-
+          <!-- Interactive Red Heart Wax Stamp Hotspot in Center -->
+          <div class="red-wax-seal-center" id="red-wax-seal" title="Click Here to Open Letter">
+            <span class="click-here-badge font-fredoka">click here</span>
           </div>
+        </div>
+      </div>
 
-          <!-- Framed Her Photo alongside letter -->
-          <div class="framed-photo-side scrapbook-card tilt-right">
-            <div class="washi-tape tape-top"></div>
-            <div class="framed-photo-inner">
-              <img src="assets/new_her_night.jpg" alt="Her Memory" class="side-couple-img">
+      <!-- SUB-VIEW 2: OPENED LETTER PAGE (FULL SCREEN LETTER WITH 3D BALLPIT BACKGROUND) -->
+      <div class="letter-subview letter-opened-view hidden" id="letter-opened-view">
+        
+        <!-- Interactive 3D Ballpit Canvas from React Bits -->
+        <canvas id="ballpit-canvas" class="ballpit-bg-canvas"></canvas>
+
+        <!-- Header with Back Button at Top Right -->
+        <div class="opened-letter-topbar">
+          <button class="back-to-envelope-pill-btn font-fredoka" id="btn-back-to-envelope">
+            back
+          </button>
+        </div>
+
+        <div class="opened-letter-layout fullscreen-letter-layout">
+          <!-- WHOLE LETTER WRITTEN ON FULL SCREEN -->
+          <div class="letter-content-wrapper font-handwritten" id="letter-content-wrapper">
+            <div class="letter-paper-opened fullscreen-paper" id="letter-typing-container">
+              <!-- Full Letter Content will be dynamically revealed here -->
             </div>
-            <p class="font-handwritten caption-sweet">My favorite person in the world 🌸</p>
           </div>
-
         </div>
 
       </div>
+
     </section>
 
     <!-- STEP 6: GIFT REVEAL 3 - MUSEUM OF US -->
-    <section id="step-6-museum" class="step-screen bg-solid-purple-stars gift-screen">
-      <div class="scrapbook-container">
-        
-        <div class="gift-header-bar">
+    <section id="step-6-museum" class="step-screen gift-screen museum-fullscreen">
+
+      <!-- DriftWall Container -->
+      <div id="drift-wall-container" class="drift-wall"
+        data-items='[
+          {"image":"assets/trip_waterfall_1.jpg","title":"Waterfall Vibes 🌊"},
+          {"image":"assets/trip_waterfall_2.jpg","title":"Just Us 🌿"},
+          {"image":"assets/trip_waterfall_3.jpg","title":"Together 🤍"},
+          {"image":"assets/trip_waterfall_4.jpg","title":"Misty Mountains 🌫️"},
+          {"image":"assets/trip_waterfall_back.jpg","title":"Gazing Away 🌊"},
+          {"image":"assets/trip_car_1.jpg","title":"Road Trip ✨"},
+          {"image":"assets/trip_car_2.jpg","title":"Wanderers 🚗"},
+          {"image":"assets/trip_car_3.jpg","title":"Our Story 💕"},
+          {"image":"assets/trip_car_fun.jpg","title":"Vibing 🕺💃"},
+          {"image":"assets/trip_bridge_rain.jpg","title":"Rainy Day 🌧️"},
+          {"image":"assets/cafe_selfie_2.jpg","title":"Cafe Days ☕"},
+          {"image":"assets/cafe_smiling.jpg","title":"Smiling Together 😊"},
+          {"image":"assets/cafe_selfie_1.jpg","title":"That Look 🥹"},
+          {"image":"assets/cafe_glasses.jpg","title":"Goofing Around 😎"},
+          {"image":"assets/cafe_hearts.jpg","title":"Heartbeats 💗"},
+          {"image":"assets/new_couple.jpg","title":"Us Together 🤍"},
+          {"image":"assets/photo2.jpg","title":"Sweetest Moments 💛"},
+          {"image":"assets/photo3.jpg","title":"Forever & Always 🌸"},
+          {"image":"assets/her_saree_smile.jpg","title":"Radiant ✨"}
+        ]'>
+        <div class="drift-wall__plane" id="drift-wall-plane"></div>
+      </div>
+
+      <!-- Floating Title Overlay -->
+      <div class="museum-overlay-ui">
+        <div class="gift-header-bar museum-header-bar">
           <button class="back-to-gifts-btn scrapbook-mini-btn" data-back="step-5">
             ← Back to Gifts 🎁
           </button>
-          <h1 class="gift-title font-cursive">museum of US</h1>
+          <div class="museum-title-block">
+            <h1 class="gift-title font-cursive museum-drift-title">museum of US</h1>
+            <p class="museum-subtitle font-handwritten">our little world, framed forever 🫖</p>
+          </div>
           <button id="btn-shower-hearts" class="scrapbook-mini-btn heart-shower-btn">
             Shower Hearts 💖
           </button>
         </div>
-
-        <p class="museum-subtitle font-handwritten">
-          our little world, framed forever 🫖
-        </p>
-
-        <!-- Museum: Minimal Clean Photo Grid -->
-        <div class="museum-minimal-grid" id="museum-canvas">
-
-          <div class="museum-photo-card tilt-left">
-            <div class="washi-tape tape-top-left"></div>
-            <div class="museum-img-wrapper">
-              <img src="assets/new_couple.jpg" alt="Us Together">
-            </div>
-            <p class="font-handwritten museum-caption">Us 🤍</p>
-          </div>
-
-          <div class="museum-photo-card tilt-right">
-            <div class="washi-tape tape-top-right"></div>
-            <div class="museum-img-wrapper">
-              <img src="assets/photo2.jpg" alt="Memory">
-            </div>
-            <p class="font-handwritten museum-caption">Sweetest Moments ✨</p>
-          </div>
-
-          <div class="museum-photo-card tilt-left-sm">
-            <div class="washi-tape tape-top"></div>
-            <div class="museum-img-wrapper">
-              <img src="assets/photo3.jpg" alt="Together">
-            </div>
-            <p class="font-handwritten museum-caption">Forever & Always 💕</p>
-          </div>
-
-          <div class="museum-photo-card tilt-right">
-            <div class="washi-tape tape-top-right"></div>
-            <div class="museum-img-wrapper">
-              <img src="assets/photo5.jpg" alt="Magic">
-            </div>
-            <p class="font-handwritten museum-caption">Pure Magic 🌟</p>
-          </div>
-
-        </div>
-
       </div>
+
     </section>
 
   </main>
